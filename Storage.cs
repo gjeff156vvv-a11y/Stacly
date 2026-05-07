@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
+using Spectre.Console;
 
 namespace TodoList
 {
@@ -23,11 +24,10 @@ namespace TodoList
         {
             using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
             {
-                List<Todo>? todoList = JsonSerializer.Deserialize<List<Todo>>(fs);
-                if(todoList == null)
+                if(fs.Length <= 0)
                     return new List<Todo>();
                 else
-                    return todoList;
+                    return  JsonSerializer.Deserialize<List<Todo>>(fs);         
             }
         }
 

@@ -2,10 +2,10 @@ using System;
 
 namespace TodoList
 {
-        public enum Priorities
-        {
-            Low,
-            Medium,
-            High
-        }
+    public enum Priorities
+    {
+        Low,
+        Medium,
+        High
+    }
 }
