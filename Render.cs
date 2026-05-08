@@ -1,6 +1,5 @@
 using Spectre.Console;
 using System;
-using System.Linq;
 
 namespace TodoList
 {
@@ -24,12 +23,8 @@ namespace TodoList
                     break;
             }
 
-             var displayList = todoList
-                .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
-                .ThenByDescending(t => t.Priority)  // Потом важные
-                .ToList();
 
-            var leftContent = new Panel(View.DrawList(displayList,selectedIndex,Navigation,isExpendMod))
+            var leftContent = new Panel(View.DrawList(todoList,selectedIndex,Navigation,isExpendMod))
                 .Header("Список задач")
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы
@@ -66,11 +61,11 @@ namespace TodoList
             layout["List"].SplitRows(
                     new Layout("Search").Size(3),
                     new Layout("ProgresBar").Size(3),
-                    new Layout("Tree").Size(53));
+                    new Layout("Tree"));
 
             layout["Edit"].SplitRows(
                     new Layout("Hello").Size(6),
-                    new Layout("Details").Size(53));
+                    new Layout("Details"));
 
             return layout;
 

@@ -26,11 +26,11 @@ namespace TodoList
                     break;
                 case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppState.SelectedIndex); break;
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppState.SelectedIndex); break;
-                case ConsoleKey.D: TodoManager.RemoveTodo(todoList,AppState.SelectedIndex); break;
+                case ConsoleKey.D: TodoManager.RemoveTodo(Navigation,todoList,AppState.SelectedIndex); break;
                 case ConsoleKey.E: Mods = Mods.Edit; break;
                 case ConsoleKey.F: Mods = Mods.Search; break;
                 case ConsoleKey.Tab:AppState.IsExpanded = !AppState.IsExpanded; break;
-                //case ConsoleKey.N: TodoManager.AddTodo(todoList); break;
+                case ConsoleKey.N:Navigation.Peek().Tasks.Add(new Todo("new",Priorities.Low)); break;
                 case ConsoleKey.Spacebar: todoList[AppState.SelectedIndex].ChangeIsCompleted(); break;
                 case ConsoleKey.Q: AppState.Running = false; return;
             }

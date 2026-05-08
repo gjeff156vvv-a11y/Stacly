@@ -13,10 +13,10 @@ namespace TodoList
             var Mods = new Mods();
             Mods = Mods.List;
             //главный список для сохранения
-            List<Todo>  todoList = Storage.ReadAll();
+            List<Todo>  RootList = Storage.ReadAll();
 
             var Navigation = new Stack<(List<Todo> Tasks,Todo? Parent)>();
-            Navigation.Push((todoList,null));
+            Navigation.Push((RootList,null));
 
             var Window = RenderWindow.CreatWindow();
 
@@ -27,17 +27,30 @@ namespace TodoList
                     {
                         while(AppState.Running)
                         {
+                            var todo = StartSort(Navigation.Peek().Tasks);
                             switch(Mods)
                             {
-                                case Mods.List: ListMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
-                                case Mods.Edit: EditMode.Mode(Navigation.Peek().Tasks,ref AppState,ref Mods); break;
-                                case Mods.Search: SearchMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
+                                case Mods.List: ListMode.Mode(Navigation,todo,ref AppState,ref Mods); break;
+                                case Mods.Edit: EditMode.Mode(todo,ref AppState,ref Mods); break;
+                                case Mods.Search: SearchMode.Mode(Navigation,todo,ref AppState,ref Mods); break;
                             }
-                            ctx.UpdateTarget(RenderWindow.Render(Window,Mods,Navigation.Peek().Tasks,AppState.SelectedIndex,Navigation,AppState.IsExpanded));
+                            todo = StartSort(Navigation.Peek().Tasks);
+                            ctx.UpdateTarget(RenderWindow.Render(Window,Mods,todo,AppState.SelectedIndex,Navigation,AppState.IsExpanded));
                             ctx.Refresh();
                         }
                     });
-            Storage.SaveAll(todoList);
+            Storage.SaveAll(RootList);
+        }
+
+        private static List<Todo> StartSort(List<Todo> list)
+        {
+
+            var displayList = list
+                .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
+                .ThenByDescending(t => t.Priority)  // Потом важные
+                .ToList();
+
+            return displayList;
         }
     }
 }

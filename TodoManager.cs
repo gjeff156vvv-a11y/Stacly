@@ -17,11 +17,11 @@ namespace  TodoList
             todoList.Add(new Todo(newName,choice));
         }
 
-        public static void RemoveTodo(List<Todo> todoList,int selectedIndex)
+        public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,int selectedIndex)
         {
             if (todoList.Count > 0) 
             {
-                todoList.RemoveAt(selectedIndex);
+                Navigation.Peek().Tasks.Remove(todoList[selectedIndex]);
             }
         }
 
