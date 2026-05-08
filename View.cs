@@ -58,12 +58,12 @@ namespace TodoList
             grid.AddColumn();
             grid.AddColumn();
 
-            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]\t{selectTodo.Name}[/]");
-            grid.AddRow($"[yellow]Важность:[/]",$"[yellow] \t{selectTodo.Priority}[/]");
-            grid.AddRow($"[green]Описание: [/]",$"[green]\t{selectTodo.Description}[/]");
-            grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]\t{Markup.Escape(colors[2])}\t[/]");
-            grid.AddRow($"Время создания: ",$" \t {selectTodo.CreatedAt}");
-            grid.AddRow($"Время выполнения: ",$" \t {selectTodo.CompleteAt}");
+            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{selectTodo.Name}[/]");
+            grid.AddRow($"[yellow]Важность:[/]",$"[yellow]{selectTodo.Priority}[/]");
+            grid.AddRow($"[green]Описание:[/]",$"[green]{selectTodo.Description}[/]");
+            grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]{Markup.Escape(colors[2])}[/]");
+            grid.AddRow($"Время создания:",$"{selectTodo.CreatedAt}");
+            grid.AddRow($"Время выполнения:",$"{selectTodo.CompleteAt}");
 
             return grid;              
         }

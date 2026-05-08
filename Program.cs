@@ -14,21 +14,29 @@ namespace TodoList
             Mods = Mods.List;
             //главный список для сохранения
             List<Todo>  todoList = Storage.ReadAll();
+
             var Navigation = new Stack<(List<Todo> Tasks,Todo? Parent)>();
             Navigation.Push((todoList,null));
 
-            while(AppState.Running)
-            {
-                Console.Clear();
+            var Window = RenderWindow.CreatWindow();
 
-                RenderWindow.Render(Mods,Navigation.Peek().Tasks,AppState.SelectedIndex,Navigation,AppState.IsExpanded);
-                switch(Mods)
-                {
-                    case Mods.List: ListMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
-                    case Mods.Edit: EditMode.Mode(Navigation.Peek().Tasks,ref AppState,ref Mods); break;
-                    case Mods.Search: SearchMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
-                }
-                                                    }
+            Console.Clear();
+
+            AnsiConsole.Live(Window)
+                .Start(ctx => 
+                    {
+                        while(AppState.Running)
+                        {
+                            switch(Mods)
+                            {
+                                case Mods.List: ListMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
+                                case Mods.Edit: EditMode.Mode(Navigation.Peek().Tasks,ref AppState,ref Mods); break;
+                                case Mods.Search: SearchMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;
+                            }
+                            ctx.UpdateTarget(RenderWindow.Render(Window,Mods,Navigation.Peek().Tasks,AppState.SelectedIndex,Navigation,AppState.IsExpanded));
+                            ctx.Refresh();
+                        }
+                    });
             Storage.SaveAll(todoList);
         }
     }
