@@ -8,10 +8,6 @@ namespace TodoList
          public static void Mode(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,ref AppState AppState,ref Mods Mods)
          {
 
-            if(todoList.Count > 0)
-            {
-                View.DrawList(todoList,AppState.SelectedIndex,Navigation,AppState.IsExpanded);
-            }
             var key = Console.ReadKey(true);
 
             switch (key.Key)

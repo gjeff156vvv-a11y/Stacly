@@ -9,7 +9,6 @@ namespace TodoList
          {
             Todo selectTodo = todoList[AppState.SelectedIndex];
            
-            View.DrawEdit(selectTodo);
             // Читаем нажатие клавиши БЕЗ ожидания Enter
             var key = Console.ReadKey(true).KeyChar;
 
