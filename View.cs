@@ -14,7 +14,7 @@ namespace TodoList
             AnsiConsole.Write(welcom);
         }
 
-        public static void DrawList(List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
+        public static Tree DrawList(List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
@@ -39,7 +39,7 @@ namespace TodoList
                      AddNodeRecurse(todo,todoList[i].SubTasks);
                 }
             }
-            AnsiConsole.Write(tree);
+            return tree;
         }
 
         private static void AddNodeRecurse(TreeNode todo,List<Todo> todoList)
