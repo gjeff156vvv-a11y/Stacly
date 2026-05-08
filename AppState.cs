@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TodoList
 {
@@ -7,5 +8,7 @@ namespace TodoList
         public bool Running = true;
         public bool IsExpanded = false;
         public int SelectedIndex = 0;
+        public string Buffer = "";
+        public Mods Mod = Mods.List;
     }
 }

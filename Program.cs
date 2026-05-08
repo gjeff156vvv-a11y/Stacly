@@ -10,8 +10,7 @@ namespace TodoList
         public static void Main(string[] str)
         {
             var AppState = new AppState();
-            var Mods = new Mods();
-            Mods = Mods.List;
+
             //главный список для сохранения
             List<Todo>  RootList = Storage.ReadAll();
 
@@ -28,14 +27,14 @@ namespace TodoList
                         while(AppState.Running)
                         {
                             var todo = StartSort(Navigation.Peek().Tasks);
-                            switch(Mods)
+                            switch(AppState.Mod)
                             {
-                                case Mods.List: ListMode.Mode(Navigation,todo,ref AppState,ref Mods); break;
-                                case Mods.Edit: EditMode.Mode(todo,ref AppState,ref Mods); break;
-                                case Mods.Search: SearchMode.Mode(Navigation,todo,ref AppState,ref Mods); break;
+                                case Mods.List: ListMode.Mode(Navigation,todo,ref AppState); break;
+                                case Mods.Edit: EditMode.Mode(todo,ref AppState); break;
+                                case Mods.Input: InputMode.Mode(ref AppState,todo); break;
                             }
                             todo = StartSort(Navigation.Peek().Tasks);
-                            ctx.UpdateTarget(RenderWindow.Render(Window,Mods,todo,AppState.SelectedIndex,Navigation,AppState.IsExpanded));
+                            ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
                         }
                     });

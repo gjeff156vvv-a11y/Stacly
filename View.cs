@@ -6,7 +6,7 @@ namespace TodoList
     static class View
     {
 
-        public static Tree DrawList(List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
+        public static Tree DrawList(List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
@@ -18,7 +18,7 @@ namespace TodoList
             {
                 string[] colors = TodoColors(todoList[i]);
                 TreeNode todo;
-                if(selectedIndex == i)
+                if(AppState.SelectedIndex == i)
                 {
                     todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
@@ -26,7 +26,7 @@ namespace TodoList
                 {
                     todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
-                if(isExpendMod == true)
+                if(AppState.IsExpanded  == true)
                 {
                      AddNodeRecurse(todo,todoList[i].SubTasks);
                 }

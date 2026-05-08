@@ -6,22 +6,19 @@ namespace  TodoList
 {
     public static class TodoManager
     {
-        public static void AddTodo(List<Todo> todoList)
+        public static void AddTodo(List<Todo> todoList,ref AppState AppState)
         {
-            var newName = AnsiConsole.Ask<string>("Введити [green]название [/]?");
-            var choice = AnsiConsole.Prompt(
-                    new SelectionPrompt<Priorities>()                         
-                    .Title("выберети [green]васжность[/] :")
-                    .AddChoices(Priorities.Low, Priorities.Medium, Priorities.High));
-
-            todoList.Add(new Todo(newName,choice));
+            var newTask = new Todo("", Priorities.Low);
+            todoList.Add(newTask);
+            AppState.SelectedIndex = todoList.IndexOf(newTask);
+            AppState.Mod = Mods.Input;
         }
 
-        public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,int selectedIndex)
+        public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,AppState AppState)
         {
             if (todoList.Count > 0) 
             {
-                Navigation.Peek().Tasks.Remove(todoList[selectedIndex]);
+                Navigation.Peek().Tasks.Remove(todoList[AppState.SelectedIndex]);
             }
         }
 
@@ -52,40 +49,40 @@ namespace  TodoList
             selectTodo.ChangeTags(newTag);
         }
 
-        public static void PushNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref int selectedIndex)
+        public static void PushNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)
         {
-            Navigation.Push(((Navigation.Peek().Tasks[selectedIndex].SubTasks),Navigation.Peek().Tasks[selectedIndex]));
-            if(Navigation.Peek().Tasks.Count == 0)TodoManager.AddTodo(Navigation.Peek().Tasks);
-            selectedIndex = 0;
+            Navigation.Push(((Navigation.Peek().Tasks[AppState.SelectedIndex].SubTasks),Navigation.Peek().Tasks[AppState.SelectedIndex]));
+            //if(Navigation.Peek().Tasks.Count == 0)TodoManager.AddTodo(Navigation.Peek().Tasks);
+            AppState.SelectedIndex = 0;
         }
 
-        public static void PopNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref int selectedIndex)
+        public static void PopNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)
         {
             if(Navigation.Peek().Parent != null)
             {
                 Navigation.Pop();
             }
-            selectedIndex = 0;
+            AppState.SelectedIndex = 0;
         }
 
-        public static void MoveUp(List<Todo> todoList,ref int selectedIndex)
+        public static void MoveUp(List<Todo> todoList,ref AppState AppState)
         {
-            if(selectedIndex > 0)       
+            if(AppState.SelectedIndex > 0)       
             {
-                Todo selectTodo = todoList[selectedIndex];
-                todoList.RemoveAt(selectedIndex);
-                todoList.Insert(selectedIndex - 1,selectTodo);
-                selectedIndex--;
+                Todo selectTodo = todoList[AppState.SelectedIndex];
+                todoList.RemoveAt(AppState.SelectedIndex);
+                todoList.Insert(AppState.SelectedIndex - 1,selectTodo);
+                AppState.SelectedIndex--;
             }
         }
-        public static void MoveDown(List<Todo> todoList,ref int selectedIndex)
+        public static void MoveDown(List<Todo> todoList,ref AppState AppState)
         {
-            if(selectedIndex < todoList.Count -1)       
+            if(AppState.SelectedIndex < todoList.Count -1)       
             {
-                Todo selectTodo = todoList[selectedIndex];
-                todoList.RemoveAt(selectedIndex);
-                todoList.Insert(selectedIndex + 1,selectTodo);
-                selectedIndex++;
+                Todo selectTodo = todoList[AppState.SelectedIndex];
+                todoList.RemoveAt(AppState.SelectedIndex);
+                todoList.Insert(AppState.SelectedIndex + 1,selectTodo);
+                AppState.SelectedIndex++;
             }
         }
     }

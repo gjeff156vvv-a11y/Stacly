@@ -5,13 +5,13 @@ namespace TodoList
 {
     static class RenderWindow
     {
-        public static Layout Render(Layout Window,Mods mod,List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
+        public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
         {
 
             var activeList = Color.White;
             var activeEdit = Color.Gray;
 
-            switch(mod)
+            switch(AppState.Mod)
             {
                 case Mods.List:
                     activeList = Color.White;
@@ -24,13 +24,13 @@ namespace TodoList
             }
 
 
-            var leftContent = new Panel(View.DrawList(todoList,selectedIndex,Navigation,isExpendMod))
+            var leftContent = new Panel(View.DrawList(todoList,Navigation,AppState))
                 .Header("Список задач")
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы
                 .BorderColor(activeList); // Тот самый цвет!
 
-            var rightContent = new Panel(View.DrawEdit(todoList[selectedIndex]))
+            var rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex]))
                 .Header(" Детали ")
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы

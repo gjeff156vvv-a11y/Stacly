@@ -5,7 +5,7 @@ namespace TodoList
 {
     static class EditMode
     {
-         public static void Mode(List<Todo> todoList,ref AppState AppState,ref Mods Mods)
+         public static void Mode(List<Todo> todoList,ref AppState AppState)
          {
             Todo selectTodo = todoList[AppState.SelectedIndex];
            
@@ -19,7 +19,7 @@ namespace TodoList
                 //case 'p': TodoManager.ChoiceNewPriority(selectTodo); break;
                 //case 't': TodoManager.WriteTags(selectTodo); break;
                 case 'c': selectTodo.ChangeIsCompleted(); break;
-                case 'q': Mods = Mods.List; break;
+                case 'q': AppState.Mod = Mods.List; break;
             }
          }
     }
