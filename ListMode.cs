@@ -34,8 +34,8 @@ namespace TodoList
                 case ConsoleKey.E: Mods = Mods.Edit; break;
                 case ConsoleKey.F: Mods = Mods.Search; break;
                 case ConsoleKey.Tab:AppState.IsExpanded = !AppState.IsExpanded; break;
-                case ConsoleKey.A: TodoManager.AddTodo(todoList); break;
-                case ConsoleKey.C: todoList[AppState.SelectedIndex].ChangeIsCompleted(); break;
+                case ConsoleKey.N: TodoManager.AddTodo(todoList); break;
+                case ConsoleKey.Spacebar: todoList[AppState.SelectedIndex].ChangeIsCompleted(); break;
                 case ConsoleKey.Q: AppState.Running = false; return;
             }
          }
