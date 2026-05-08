@@ -46,7 +46,7 @@ namespace TodoList
         {
             for(var i = 0; i < todoList.Count;i++)
             {
-                string[] colors = TodoColors(todoList[i]);
+                string[]  colors = TodoColors(todoList[i]);
                 if(todoList.Count <= 0)return;
                 else
                 {
@@ -57,7 +57,7 @@ namespace TodoList
 
         }
 
-        public static void DrawEdit(Todo selectTodo)
+        public static Rows DrawEdit(Todo selectTodo)
         {
             string[] colors = TodoColors(selectTodo);
 
@@ -66,7 +66,7 @@ namespace TodoList
                 new Markup($"[green]{selectTodo.Description}[/]"),
                 new Markup($"[{colors[1]}]{Markup.Escape(colors[2])}\t{selectTodo.CreatedAt}[/]")
             );
-            AnsiConsole.Write(rows);               
+            return rows;              
         }
 
         private static string[] TodoColors(Todo todo)
