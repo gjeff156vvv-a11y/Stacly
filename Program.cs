@@ -21,7 +21,7 @@ namespace TodoList
             {
                 Console.Clear();
 
-                View.RenderWindow(Mods);
+                RenderWindow.Render(Mods,Navigation.Peek().Tasks,AppState.SelectedIndex,Navigation,AppState.IsExpanded);
                 switch(Mods)
                 {
                     case Mods.List: ListMode.Mode(Navigation,Navigation.Peek().Tasks,ref AppState,ref Mods); break;

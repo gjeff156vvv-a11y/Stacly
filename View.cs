@@ -6,7 +6,7 @@ namespace TodoList
     static class View
     {
 
-        private static Tree DrawList(List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
+        public static Tree DrawList(List<Todo> todoList,int selectedIndex,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,bool isExpendMod)
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
@@ -49,30 +49,23 @@ namespace TodoList
 
         }
 
-        public static void RenderWindow(Mods mod)
-        {
-            var layout = new Layout("Root")
-                .SplitRows(
-                        new Layout("Stackly"),
-                        new Layout("Comands").Size(5));
-            
-            layout["Stackly"].SplitColumns(
-                    new Layout("List"),
-                    new Layout("Edit"));
-
-            AnsiConsole.Write(layout);
-        }
-
-        public static Rows DrawEdit(Todo selectTodo)
+        public static Grid DrawEdit(Todo selectTodo)
         {
             string[] colors = TodoColors(selectTodo);
 
-            var rows = new Rows(
-                new Markup($"[{colors[0]}]{selectTodo.Name}[/]\t[yellow]{selectTodo.Priority}[/]"),
-                new Markup($"[green]{selectTodo.Description}[/]"),
-                new Markup($"[{colors[1]}]{Markup.Escape(colors[2])}\t{selectTodo.CreatedAt}[/]")
-            );
-            return rows;              
+            var grid = new Grid();
+
+            grid.AddColumn();
+            grid.AddColumn();
+
+            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]\t{selectTodo.Name}[/]");
+            grid.AddRow($"[yellow]Важность:[/]",$"[yellow] \t{selectTodo.Priority}[/]");
+            grid.AddRow($"[green]Описание: [/]",$"[green]\t{selectTodo.Description}[/]");
+            grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]\t{Markup.Escape(colors[2])}\t[/]");
+            grid.AddRow($"Время создания: ",$" \t {selectTodo.CreatedAt}");
+            grid.AddRow($"Время выполнения: ",$" \t {selectTodo.CompleteAt}");
+
+            return grid;              
         }
 
         private static string[] TodoColors(Todo todo)
