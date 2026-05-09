@@ -17,20 +17,29 @@ namespace TodoList
             for (int i = 0; i < todoList.Count; i++)
             {
                 string[] colors = TodoColors(todoList[i]);
-                TreeNode todo;
+                TreeNode todo = null;
+
                 if(AppState.SelectedIndex == i)
                 {
+                    todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                }
+                else if(AppState.EditingTodo == todoList[i])
+                { 
                     if(AppState.Mod == Mods.Input && AppState.EditingField == "Name")
                     {
                         todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}_[/]");
                     }
-                    else todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
-                else 
+                else
                 {
-                    todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                    if (!string.IsNullOrEmpty(AppState.SearchBuffer.ToLower().Trim()) && AppState.FoundItems.Contains(todoList[i])) 
+                    {
+                        todo = tree.AddNode($"[DarkOrange]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                    }
+                    else todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
-                if(AppState.IsExpanded  == true)
+
+                if(AppState.IsExpanded  == true && todo != null)
                 {
                      AddNodeRecurse(todo,todoList[i].SubTasks);
                 }
@@ -72,13 +81,21 @@ namespace TodoList
             grid.AddColumn();
             grid.AddColumn();
 
+            grid.AddRow("");
             grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{displayName}[/]");
+            grid.AddRow("");
             grid.AddRow($"[yellow]Важность:[/]",$"[yellow]{selectTodo.Priority}[/]");
+            grid.AddRow("");
             grid.AddRow($"[green]Описание:[/]",$"[green]{displayDesc}[/]");
+            grid.AddRow("");
             grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]{Markup.Escape(colors[2])}[/]");
+            grid.AddRow("");
             grid.AddRow($"[yellow]Теги:[/]",$"[yellow]{displayTags}[/]");
+            grid.AddRow("");
             grid.AddRow($"Время создания:",$"{selectTodo.CreatedAt}");
+            grid.AddRow("");
             grid.AddRow($"Время выполнения:",$"{selectTodo.CompleteAt}");
+            grid.AddRow("");
 
             return grid;              
         }

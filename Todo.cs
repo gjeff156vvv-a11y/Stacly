@@ -58,7 +58,7 @@ namespace TodoList
         public void ChangeIsCompleted(bool status)
         {
             IsCompleted = status;
-            if(SubTasks.Count > 0)
+            if(SubTasks.Count > 1)
             {
                 foreach(var obj in SubTasks)
                 {
@@ -79,7 +79,10 @@ namespace TodoList
         }
         public void ChangeTags(string newTag)
         {
-            Tags = newTag.Split(",").ToList();
+            // Разделяем, убираем пробелы по краям и фильтруем пустые записи
+            Tags = newTag.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                 .Select(t => t.Trim())
+                 .ToList();        
         }
     }
 }

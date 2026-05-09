@@ -96,5 +96,37 @@ namespace  TodoList
                 AppState.SelectedIndex++;
             }
         }
+
+        public static List<Todo> Sort(List<Todo> list,AppState AppState)
+        {
+            var displayList = list
+                .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
+                .ThenByDescending(t => t.Priority)  // Потом важные
+                .ToList();
+            return displayList;
+        }
+
+        public static void MoveUpSearch(AppState AppState,List<Todo> todoList)
+        {
+            if(AppState.CurentFoundMatch > 0)
+            {
+                AppState.CurentFoundMatch = AppState.FoundItems.Count -1;
+            }
+            AppState.CurentFoundMatch--;
+            int index = todoList.IndexOf(AppState.FoundItems[AppState.CurentFoundMatch]);
+            AppState.SelectedIndex = index;
+        }
+
+        public static void MoveDownSearch(AppState AppState,List<Todo> todoList)
+        {
+            if(AppState.CurentFoundMatch < AppState.FoundItems.Count -1)
+            {
+                AppState.CurentFoundMatch = 0;     
+            }
+            AppState.CurentFoundMatch++;
+            int index = todoList.IndexOf(AppState.FoundItems[AppState.CurentFoundMatch]);
+            AppState.SelectedIndex = index;
+
+        }
     }
 }

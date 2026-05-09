@@ -6,14 +6,6 @@ namespace TodoList
     {
         public static void Mode(ref AppState AppState,List<Todo> todoList)
         { 
-            // Вместо FindIndex(t => t.Name == "")
-            var inputIndex = todoList.IndexOf(AppState.EditingTodo);
-
-            if (inputIndex != -1)
-            {
-                AppState.SelectedIndex = inputIndex;
-            }
-
             // Читаем ТОЛЬКО ОДНУ клавишу
             var key = Console.ReadKey(true); 
 
@@ -23,7 +15,7 @@ namespace TodoList
                     // Пользователь закончил ввод
                     switch(AppState.EditingField)
                     {
-                        case "Name": todoList[AppState.SelectedIndex].ChangeName(AppState.Buffer);break;
+                        case "Name": AppState.EditingTodo.ChangeName(AppState.Buffer);break;
                         case "Description": todoList[AppState.SelectedIndex].ChangeDescription(AppState.Buffer);break;
                         case "Tags": todoList[AppState.SelectedIndex].ChangeTags(AppState.Buffer);break;
                     }

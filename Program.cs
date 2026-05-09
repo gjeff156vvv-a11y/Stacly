@@ -11,6 +11,9 @@ namespace TodoList
         {
             var AppState = new AppState();
 
+            //состояние приложения
+            bool Running = true;
+
             //главный список для сохранения
             List<Todo>  RootList = Storage.ReadAll();
 
@@ -21,24 +24,25 @@ namespace TodoList
 
             Console.Clear();
 
+
             AnsiConsole.Live(Window)
                 .Start(ctx => 
                     {
-                        var todo = Sort(Navigation.Peek().Tasks,AppState);
+                        var todo = TodoManager.Sort(Navigation.Peek().Tasks,AppState);
                         ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                         ctx.Refresh();
 
-                        while(AppState.Running)
+                        while(Running)
                         {
-                            todo = Sort(Navigation.Peek().Tasks,AppState);
+                            todo = TodoManager.Sort(Navigation.Peek().Tasks,AppState);
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
                             switch(AppState.Mod)
                             {
-                                case Mods.List: ListMode.Mode(Navigation,todo,ref AppState); break;
+                                case Mods.List: ListMode.Mode(Navigation,todo,ref AppState,ref Running); break;
                                 case Mods.Edit: EditMode.Mode(todo,ref AppState); break;
                                 case Mods.Input: InputMode.Mode(ref AppState,todo); break;
-                                case Mods.Search: SearchMode.Mode(RootList,ref AppState);break;
+                                case Mods.Search: SearchMode.Mode(RootList,AppState);break;
                             }
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
@@ -47,16 +51,5 @@ namespace TodoList
             Storage.SaveAll(RootList);
         }
 
-        private static List<Todo> Sort(List<Todo> list,AppState AppState)
-        {
-
-            var displayList = list
-                .Where(t => string.IsNullOrEmpty(AppState.SearchInput) || 
-                    t.Name.Contains(AppState.SearchInput, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
-                .ThenByDescending(t => t.Priority)  // Потом важные
-                .ToList();
-            return displayList;
-        }
     }
 }

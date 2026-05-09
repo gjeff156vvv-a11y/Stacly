@@ -7,6 +7,8 @@ namespace TodoList
     {
         public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
         {
+            Panel leftContent;
+            Panel rightContent;
 
             var activeList = Color.White;
             var activeEdit = Color.Gray;
@@ -24,30 +26,42 @@ namespace TodoList
             }
 
 
-            var leftContent = new Panel(View.DrawList(todoList,Navigation,AppState))
+            leftContent = new Panel(View.DrawList(todoList,Navigation,AppState))
                 .Header("Список задач")
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы
+                .Padding(1,1)
                 .BorderColor(activeList); // Тот самый цвет!
 
-            var rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex],AppState))
-                .Header(" Детали ")
-                .Expand()
-                .Border(BoxBorder.Rounded) // Тип границы
-                .BorderColor(activeEdit);
+            if(todoList.Count > 0)
+            {
+                rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex],AppState))
+                    .Header(" Детали ")
+                    .Expand()
+                    .Border(BoxBorder.Rounded) // Тип границы
+                    .BorderColor(activeEdit);
+            }
+            else
+            { 
+                rightContent = new Panel(new Text($"\nНичего не найдено..."))
+                    .Header(" Детали ")
+                    .Expand()
+                    .Border(BoxBorder.Rounded) // Тип границы
+                    .BorderColor(activeEdit);
+            }
 
             Text text;
-            if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchInput + "█", new Style(Color.Yellow));
+            if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchBuffer + "█", new Style(Color.Yellow));
             else text = new Text(" ");
             var searchBox = new Panel(text)
                 .Header(" ПОИСК ")
                 .Border(BoxBorder.Rounded)
                 .Expand()
-                .BorderColor(AppState.SearchInput.StartsWith("#") ? Color.Magenta : Color.Cyan); 
+                .BorderColor(AppState.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
                 // Цвет рамки меняется, если ищем по тегам!
 
             Window["Search"].Update(searchBox);
-            Window["ProgresBar"].Update(new Panel(new Text("Прогресс 0%")));
+            Window["ProgresBar"].Update(new Panel(new Text("Прогресс 0%")).Expand());
             Window["Tree"].Update(leftContent);
             Window["Hello"].Update(new Panel(AppState.Mod.ToString()));
             Window["Details"].Update(rightContent);
