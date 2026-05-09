@@ -120,8 +120,10 @@ namespace TodoList
         {
             // Примерная идея для содержимого:
             var grid = new Grid().AddColumn();
+            grid.AddRow("");
             grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v1.0[/]");
-            grid.AddRow($"[yellow]Mode:[/] [inverse]{state.Mod}[/]");
+            grid.AddRow("");
+            grid.AddRow($"[yellow]Mode:[/] [invert]{AppState.Mod}[/]");
             //grid.AddRow($"[blue]Total Tasks:[/] {TodoManager.GetDeepProgress(rootList).total}");
             return grid;
 
