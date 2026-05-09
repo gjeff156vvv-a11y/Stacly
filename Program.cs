@@ -24,16 +24,21 @@ namespace TodoList
             AnsiConsole.Live(Window)
                 .Start(ctx => 
                     {
+                        var todo = StartSort(Navigation.Peek().Tasks);
+                        ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
+                        ctx.Refresh();
+
                         while(AppState.Running)
                         {
-                            var todo = StartSort(Navigation.Peek().Tasks);
+                            todo = StartSort(Navigation.Peek().Tasks);
+                            ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
+                            ctx.Refresh();
                             switch(AppState.Mod)
                             {
                                 case Mods.List: ListMode.Mode(Navigation,todo,ref AppState); break;
                                 case Mods.Edit: EditMode.Mode(todo,ref AppState); break;
                                 case Mods.Input: InputMode.Mode(ref AppState,todo); break;
                             }
-                            todo = StartSort(Navigation.Peek().Tasks);
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
                         }

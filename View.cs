@@ -20,7 +20,11 @@ namespace TodoList
                 TreeNode todo;
                 if(AppState.SelectedIndex == i)
                 {
-                    todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                    if(AppState.Mod == Mods.Input)
+                    {
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}[/]");
+                    }
+                    else todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
                 else 
                 {

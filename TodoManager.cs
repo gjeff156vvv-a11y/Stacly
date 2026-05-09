@@ -8,9 +8,9 @@ namespace  TodoList
     {
         public static void AddTodo(List<Todo> todoList,ref AppState AppState)
         {
-            var newTask = new Todo("", Priorities.Low);
-            todoList.Add(newTask);
-            AppState.SelectedIndex = todoList.IndexOf(newTask);
+            todoList.Add(new Todo("", Priorities.Low));
+            AppState.Buffer = "";
+            //AppState.SelectedIndex = todoList.IndexOf(newTask);
             AppState.Mod = Mods.Input;
         }
 

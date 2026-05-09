@@ -5,7 +5,15 @@ namespace TodoList
     static class InputMode
     {
         public static void Mode(ref AppState AppState,List<Todo> todoList)
-        {
+        { 
+            var inputIndex = todoList.FindIndex(t => t.Name == "" && !t.IsCompleted);
+
+            if (inputIndex != -1) 
+            {
+                // Насильно ставим курсор на неё для отрисовки
+                AppState.SelectedIndex = inputIndex; 
+            }
+
             // Читаем ТОЛЬКО ОДНУ клавишу
             var key = Console.ReadKey(true); 
 
