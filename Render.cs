@@ -50,6 +50,14 @@ namespace TodoList
                     .BorderColor(activeEdit);
             }
 
+            int completed = 0;
+            int total = 0;
+            var chat = View.DrawBar(todoList,ref completed,ref total);
+            var Bar = new Panel(chat)
+                .Header($" [white]Прогресс: {completed}/{total}[/] ")
+                .Expand()
+                .Border(BoxBorder.Rounded);
+
             Text text;
             if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchBuffer + "█", new Style(Color.Yellow));
             else text = new Text(" ");
@@ -61,7 +69,7 @@ namespace TodoList
                 // Цвет рамки меняется, если ищем по тегам!
 
             Window["Search"].Update(searchBox);
-            Window["ProgresBar"].Update(new Panel(new Text("Прогресс 0%")).Expand());
+            Window["ProgresBar"].Update(Bar);
             Window["Tree"].Update(leftContent);
             Window["Hello"].Update(new Panel(AppState.Mod.ToString()));
             Window["Details"].Update(rightContent);

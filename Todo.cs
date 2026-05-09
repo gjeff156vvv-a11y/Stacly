@@ -58,11 +58,11 @@ namespace TodoList
         public void ChangeIsCompleted(bool status)
         {
             IsCompleted = status;
-            if(SubTasks.Count > 1)
+            if(SubTasks.Count > 0)
             {
                 foreach(var obj in SubTasks)
                 {
-                    obj.ChangeIsCompleted();
+                    obj.ChangeIsCompleted(status);
                 }
             }
 

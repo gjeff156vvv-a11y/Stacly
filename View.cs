@@ -100,6 +100,22 @@ namespace TodoList
             return grid;              
         }
 
+        public static BreakdownChart DrawBar(List<Todo> todoList,ref int completed ,ref int total)
+        {
+            (completed, total) = TodoManager.GetDeepProgress(todoList);
+            int remaining = total - completed;
+
+            var chart = new BreakdownChart()
+                .FullSize() // Растянуть на всю ширину панели
+                .AddItem("Done", completed, Color.Green)
+                .AddItem("Todo", remaining, Color.Red);
+
+            // Если задач совсем нет, можно добавить пустой элемент, чтобы график не падал
+            if (total == 0) chart.AddItem("No tasks", 1, Color.Grey);
+
+            return chart;
+        }
+
         private static string[] TodoColors(Todo todo)
         {
             string[] colors = new string[3];

@@ -128,5 +128,29 @@ namespace  TodoList
             AppState.SelectedIndex = index;
 
         }
+
+        public static (int completed, int total) GetDeepProgress(IEnumerable<Todo> tasks)
+        {
+            int completed = 0;
+            int total = 0;
+
+            foreach (var task in tasks)
+            {
+                // 1. Считаем саму текущую задачу
+                total++;
+                if (task.IsCompleted) completed++;
+
+                // 2. Если есть подзадачи, рекурсивно считаем их
+                if (task.SubTasks != null && task.SubTasks.Count > 0)
+                {
+                    // ВАЖНО: Результат вызова НУЖНО ПРИБАВИТЬ к текущим счетчикам
+                    var sub = GetDeepProgress(task.SubTasks);
+                    completed += sub.completed; // Плюсуем выполненные подзадачи
+                    total += sub.total;         // Плюсуем общее число подзадач
+                }
+            }
+            return (completed, total);
+        }
+
     }
 }
