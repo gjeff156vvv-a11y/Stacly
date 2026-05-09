@@ -129,6 +129,21 @@ namespace TodoList
 
         }
 
+        public static Panel DrawStatusBar(AppState state)
+        {
+            string text = state.Mod switch
+            {
+                Mods.List => "[bold aqua]j/k[/] [gray]up/down[/] | [bold aqua]h/l[/] [gray]in/out[/] | [bold aqua]Space[/] [gray]done[/] | [bold aqua]n[/] [gray]new[/] | [bold aqua]/[/] [gray]search[/]",
+                Mods.Edit => "[bold yellow]r[/] [gray]rename[/] | [bold yellow]d[/] [gray]desc[/] | [bold yellow]p[/] [gray]priority[/] | [bold yellow]t[/] [gray]tags[/] | [bold red]Esc[/] [gray]back[/]",
+                Mods.Input => "[bold green]Enter[/] [gray]save[/] | [bold red]Esc[/] [gray]cancel[/]",
+                Mods.Search => "[bold orange1]Enter/Esc[/] [gray]finish[/] | [bold gray]Type to filter...[/]",
+                _ => ""
+            };
+
+            return new Panel(new ControlCode(text)).Expand().Border(BoxBorder.None);
+        }
+
+
         private static string[] TodoColors(Todo todo)
         {
             string[] colors = new string[3];

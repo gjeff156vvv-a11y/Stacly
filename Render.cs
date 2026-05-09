@@ -77,7 +77,7 @@ namespace TodoList
             Window["Tree"].Update(leftContent);
             Window["Hello"].Update(Hello);
             Window["Details"].Update(rightContent);
-            Window["Comands"].Update(new Panel(new Text("j/k - навигация...")));
+            Window["Comands"].Update(View.DrawStatusBar(AppState));
 
             return Window;
         }
