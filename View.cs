@@ -116,6 +116,17 @@ namespace TodoList
             return chart;
         }
 
+        public static Grid DrawHello(AppState AppState)
+        {
+            // Примерная идея для содержимого:
+            var grid = new Grid().AddColumn();
+            grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v1.0[/]");
+            grid.AddRow($"[yellow]Mode:[/] [inverse]{state.Mod}[/]");
+            //grid.AddRow($"[blue]Total Tasks:[/] {TodoManager.GetDeepProgress(rootList).total}");
+            return grid;
+
+        }
+
         private static string[] TodoColors(Todo todo)
         {
             string[] colors = new string[3];

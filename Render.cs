@@ -68,10 +68,14 @@ namespace TodoList
                 .BorderColor(AppState.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
                 // Цвет рамки меняется, если ищем по тегам!
 
+            var Hello = new Panel(View.DrawHello(AppState))
+                .Expand()
+                .Border(BoxBorder.Rounded);
+
             Window["Search"].Update(searchBox);
             Window["ProgresBar"].Update(Bar);
             Window["Tree"].Update(leftContent);
-            Window["Hello"].Update(new Panel(AppState.Mod.ToString()));
+            Window["Hello"].Update(Hello);
             Window["Details"].Update(rightContent);
             Window["Comands"].Update(new Panel(new Text("j/k - навигация...")));
 
