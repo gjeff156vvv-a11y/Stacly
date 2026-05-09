@@ -12,6 +12,6 @@ namespace TodoList
         public Mods Mod = Mods.List;
         public string EditingField = "";
         public Todo? EditingTodo = null; 
-
+        public string SearchInput = "";
     }
 }

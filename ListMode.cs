@@ -28,7 +28,7 @@ namespace TodoList
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppState); break;
                 case ConsoleKey.D: TodoManager.RemoveTodo(Navigation,todoList,AppState); break;
                 case ConsoleKey.E: AppState.Mod = Mods.Edit; break;
-                //case ConsoleKey.: Mods = Mods.Search; break;
+                case ConsoleKey.F: AppState.Mod = Mods.Search; break;
                 case ConsoleKey.Tab:AppState.IsExpanded = !AppState.IsExpanded; break;
                 case ConsoleKey.N: TodoManager.AddTodo(Navigation.Peek().Tasks,ref AppState); break;
                 case ConsoleKey.Spacebar: todoList[AppState.SelectedIndex].ChangeIsCompleted(); break;

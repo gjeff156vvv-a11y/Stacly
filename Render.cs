@@ -35,11 +35,21 @@ namespace TodoList
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы
                 .BorderColor(activeEdit);
-            
-            Window["Search"].Update(new Panel(new Text("Поиск...")));
+
+            Text text;
+            if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchInput + "█", new Style(Color.Yellow));
+            else text = new Text(" ");
+            var searchBox = new Panel(text)
+                .Header(" ПОИСК ")
+                .Border(BoxBorder.Rounded)
+                .Expand()
+                .BorderColor(AppState.SearchInput.StartsWith("#") ? Color.Magenta : Color.Cyan); 
+                // Цвет рамки меняется, если ищем по тегам!
+
+            Window["Search"].Update(searchBox);
             Window["ProgresBar"].Update(new Panel(new Text("Прогресс 0%")));
             Window["Tree"].Update(leftContent);
-            Window["Hello"].Update(new Panel(new Text("Привет!")));
+            Window["Hello"].Update(new Panel(AppState.Mod.ToString()));
             Window["Details"].Update(rightContent);
             Window["Comands"].Update(new Panel(new Text("j/k - навигация...")));
 

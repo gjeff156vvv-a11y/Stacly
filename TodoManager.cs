@@ -10,7 +10,7 @@ namespace  TodoList
         {
             var newTask = new Todo("", Priorities.Low);
             todoList.Add(newTask);
-            AppState.EditingField = "NewName";
+            AppState.EditingField = "Name";
             AppState.EditingTodo = newTask;
             AppState.Mod = Mods.Input;
         }

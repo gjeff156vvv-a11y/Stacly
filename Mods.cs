@@ -6,6 +6,7 @@ namespace TodoList
     {
         List,
         Edit,
+        Search,
         Input
     }
 }

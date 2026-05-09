@@ -24,13 +24,13 @@ namespace TodoList
             AnsiConsole.Live(Window)
                 .Start(ctx => 
                     {
-                        var todo = StartSort(Navigation.Peek().Tasks);
+                        var todo = Sort(Navigation.Peek().Tasks,AppState);
                         ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                         ctx.Refresh();
 
                         while(AppState.Running)
                         {
-                            todo = StartSort(Navigation.Peek().Tasks);
+                            todo = Sort(Navigation.Peek().Tasks,AppState);
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
                             switch(AppState.Mod)
@@ -38,6 +38,7 @@ namespace TodoList
                                 case Mods.List: ListMode.Mode(Navigation,todo,ref AppState); break;
                                 case Mods.Edit: EditMode.Mode(todo,ref AppState); break;
                                 case Mods.Input: InputMode.Mode(ref AppState,todo); break;
+                                case Mods.Search: SearchMode.Mode(RootList,ref AppState);break;
                             }
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
@@ -46,14 +47,15 @@ namespace TodoList
             Storage.SaveAll(RootList);
         }
 
-        private static List<Todo> StartSort(List<Todo> list)
+        private static List<Todo> Sort(List<Todo> list,AppState AppState)
         {
 
             var displayList = list
+                .Where(t => string.IsNullOrEmpty(AppState.SearchInput) || 
+                    t.Name.Contains(AppState.SearchInput, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
                 .ThenByDescending(t => t.Priority)  // Потом важные
                 .ToList();
-
             return displayList;
         }
     }
