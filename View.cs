@@ -20,9 +20,9 @@ namespace TodoList
                 TreeNode todo;
                 if(AppState.SelectedIndex == i)
                 {
-                    if(AppState.Mod == Mods.Input)
+                    if(AppState.Mod == Mods.Input && AppState.EditingField == "Name")
                     {
-                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}[/]");
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}_[/]");
                     }
                     else todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
@@ -53,19 +53,30 @@ namespace TodoList
 
         }
 
-        public static Grid DrawEdit(Todo selectTodo)
+        public static Grid DrawEdit(Todo selectTodo,AppState AppState)
         {
             string[] colors = TodoColors(selectTodo);
+            string displayName = (AppState.EditingField == "Name")
+                ? AppState.Buffer + "_" 
+                : selectTodo.Name;
+            string displayDesc = (AppState.EditingField == "Description") 
+                ? AppState.Buffer + "_" 
+                : selectTodo.Description;
+
+            string displayTags = (AppState.EditingField == "Tags") 
+                ? AppState.Buffer + "_" 
+                : string.Join(", ", selectTodo.Tags);
 
             var grid = new Grid();
 
             grid.AddColumn();
             grid.AddColumn();
 
-            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{selectTodo.Name}[/]");
+            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{displayName}[/]");
             grid.AddRow($"[yellow]Важность:[/]",$"[yellow]{selectTodo.Priority}[/]");
-            grid.AddRow($"[green]Описание:[/]",$"[green]{selectTodo.Description}[/]");
+            grid.AddRow($"[green]Описание:[/]",$"[green]{displayDesc}[/]");
             grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]{Markup.Escape(colors[2])}[/]");
+            grid.AddRow($"[yellow]Теги:[/]",$"[yellow]{displayTags}[/]");
             grid.AddRow($"Время создания:",$"{selectTodo.CreatedAt}");
             grid.AddRow($"Время выполнения:",$"{selectTodo.CompleteAt}");
 

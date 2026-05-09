@@ -8,9 +8,10 @@ namespace  TodoList
     {
         public static void AddTodo(List<Todo> todoList,ref AppState AppState)
         {
-            todoList.Add(new Todo("", Priorities.Low));
-            AppState.Buffer = "";
-            //AppState.SelectedIndex = todoList.IndexOf(newTask);
+            var newTask = new Todo("", Priorities.Low);
+            todoList.Add(newTask);
+            AppState.EditingField = "NewName";
+            AppState.EditingTodo = newTask;
             AppState.Mod = Mods.Input;
         }
 
@@ -22,31 +23,41 @@ namespace  TodoList
             }
         }
 
-        public static void RenameTodo(Todo selectTodo)
+        public static void RenameTodo(Todo selectTodo,AppState AppState)
         {
-            var newName = AnsiConsole.Ask<string>("Введити новое [green]название [/]?");
-            selectTodo.ChangeName(newName);
+            AppState.EditingField = "Name";
+            AppState.EditingTodo = selectTodo;
+            AppState.Buffer = selectTodo.Name;
+            AppState.Mod = Mods.Input;
         }
 
-        public static void WriteDescription(Todo selectTodo)
+        public static void WriteDescription(Todo selectTodo,AppState AppState)
         {
-            var newDescription = AnsiConsole.Ask<string>("Введити новое [green]описание[/]?");
-            selectTodo.ChangeDescription(newDescription);
+            AppState.EditingField = "Description";
+            AppState.EditingTodo = selectTodo;
+            AppState.Buffer = selectTodo.Description;
+            AppState.Mod = Mods.Input;
+
         }
 
-        public static void ChoiceNewPriority(Todo selectTodo)
+        public static void CyclePriority(Todo todo)
         {
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<Priorities>()                        
-                .Title("выберети [green]васжность[/] :")
-                .AddChoices(Priorities.Low, Priorities.Medium, Priorities.High));
-            selectTodo.ChangePriority(choice);
+            todo.ChangePriority(todo.Priority switch
+            {
+                Priorities.Low => Priorities.Medium,
+                Priorities.Medium => Priorities.High,
+                Priorities.High => Priorities.Low,
+        _       => Priorities.Low
+            });
         }
 
-        public static void WriteTags(Todo selectTodo)
+        public static void WriteTags(Todo selectTodo,AppState AppState)
         {
-            var newTag = AnsiConsole.Ask<string>("Введити новый [green]тег[/]?");
-            selectTodo.ChangeTags(newTag);
+            AppState.EditingField = "Tags";
+            AppState.EditingTodo = selectTodo;
+            AppState.Buffer = string.Join(", ", selectTodo.Tags);
+            AppState.Mod = Mods.Input;
+
         }
 
         public static void PushNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)

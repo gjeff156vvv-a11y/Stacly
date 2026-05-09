@@ -6,12 +6,12 @@ namespace TodoList
     {
         public static void Mode(ref AppState AppState,List<Todo> todoList)
         { 
-            var inputIndex = todoList.FindIndex(t => t.Name == "" && !t.IsCompleted);
+            // Вместо FindIndex(t => t.Name == "")
+            var inputIndex = todoList.IndexOf(AppState.EditingTodo);
 
-            if (inputIndex != -1) 
+            if (inputIndex != -1)
             {
-                // Насильно ставим курсор на неё для отрисовки
-                AppState.SelectedIndex = inputIndex; 
+                AppState.SelectedIndex = inputIndex;
             }
 
             // Читаем ТОЛЬКО ОДНУ клавишу
@@ -21,23 +21,40 @@ namespace TodoList
             {
                 case ConsoleKey.Enter:
                     // Пользователь закончил ввод
-                    todoList[AppState.SelectedIndex].ChangeName(AppState.Buffer);
+                    switch(AppState.EditingField)
+                    {
+                        case "Name": todoList[AppState.SelectedIndex].ChangeName(AppState.Buffer);break;
+                        case "Description": todoList[AppState.SelectedIndex].ChangeDescription(AppState.Buffer);break;
+                        case "Tags": todoList[AppState.SelectedIndex].ChangeTags(AppState.Buffer);break;
+                    }
+
                     AppState.Buffer = ""; // Очищаем черновик
+                    AppState.EditingField = "";
+                    AppState.EditingTodo = null;
                     AppState.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
                 case ConsoleKey.Backspace:
                     if (AppState.Buffer.Length > 0)
                     AppState.Buffer = AppState.Buffer[..^1];
-                break;
+                    break;
+                
+                case ConsoleKey.Escape:
+                    AppState.Buffer = "";
+                    AppState.EditingField = "";
+                    AppState.EditingTodo = null;
+                    AppState.Mod = Mods.List;
+                    break;
 
                 default:
-                // Если это обычная буква или цифра
-                if (!char.IsControl(key.KeyChar))
-                {
-                    AppState.Buffer += key.KeyChar;
-                }
-                break;
+                    // Если это обычная буква или цифра
+                    if (!char.IsControl(key.KeyChar))
+                    {
+                        AppState.Buffer += key.KeyChar;
+                    }
+                    break;
+
+
             }
 
         }

@@ -11,5 +11,7 @@ namespace TodoList
         public string Buffer = "";
         public Mods Mod = Mods.List;
         public string EditingField = "";
+        public Todo? EditingTodo = null; 
+
     }
 }

@@ -10,16 +10,16 @@ namespace TodoList
             Todo selectTodo = todoList[AppState.SelectedIndex];
            
             // Читаем нажатие клавиши БЕЗ ожидания Enter
-            var key = Console.ReadKey(true).KeyChar;
+            var key = Console.ReadKey(true);
 
-            switch (key)
+            switch (key.Key)
             {
-                //case 'r': TodoManager.RenameTodo(selectTodo); break;
-                //case 'd': TodoManager.WriteDescription(selectTodo); break;               
-                //case 'p': TodoManager.ChoiceNewPriority(selectTodo); break;
-                //case 't': TodoManager.WriteTags(selectTodo); break;
-                case 'c': selectTodo.ChangeIsCompleted(); break;
-                case 'q': AppState.Mod = Mods.List; break;
+                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,AppState); break;
+                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,AppState); break;               
+                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo); break;
+                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppState); break;
+                case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
+                case ConsoleKey.Escape: AppState.Mod = Mods.List; break;
             }
          }
     }

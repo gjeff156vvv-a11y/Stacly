@@ -30,7 +30,7 @@ namespace TodoList
                 .Border(BoxBorder.Rounded) // Тип границы
                 .BorderColor(activeList); // Тот самый цвет!
 
-            var rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex]))
+            var rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex],AppState))
                 .Header(" Детали ")
                 .Expand()
                 .Border(BoxBorder.Rounded) // Тип границы
