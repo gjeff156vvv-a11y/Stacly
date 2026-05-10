@@ -2,7 +2,7 @@
 using Spectre.Console;
 using System.Collections.Generic;
 
-namespace TodoList
+namespace Stacly
 {
     class Program
     {

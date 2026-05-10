@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TodoList
+namespace Stacly
 {
     public class AppState 
     {

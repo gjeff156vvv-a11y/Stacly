@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using Spectre.Console;
 
-namespace TodoList
+namespace Stacly
 {
     public static class Storage
     {

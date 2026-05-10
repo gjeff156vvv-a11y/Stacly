@@ -1,7 +1,7 @@
 using System;
 using Spectre.Console;
 
-namespace TodoList
+namespace Stacly
 {
     static class ListMode
     {

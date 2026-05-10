@@ -1,6 +1,6 @@
 using System;
 
-namespace TodoList 
+namespace Stacly 
 {
     static class InputMode
     {

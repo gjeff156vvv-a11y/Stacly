@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace TodoList
+namespace Stacly
 {
     static class SearchMode
     {
