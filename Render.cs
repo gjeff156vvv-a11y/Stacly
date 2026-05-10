@@ -1,4 +1,5 @@
 using Spectre.Console;
+using Spectre.Console.Rendering;
 using System;
 
 namespace Stacly
@@ -7,60 +8,42 @@ namespace Stacly
     {
         public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
         {
-            Panel leftContent;
-            Panel rightContent;
+            //сылки на контент
+            var tree = View.DrawList(todoList,Navigation,AppState);
+            var dital = View.DrawEdit(todoList[AppState.SelectedIndex],AppState);
+            int total = 0, completed = 0;
+            var progresBar = View.DrawBar(todoList,ref completed,ref total);
+            var hello = View.DrawHello(AppState);
+            var help = View.DrawStatusBar(AppState);
 
-            var activeList = Color.White;
-            var activeEdit = Color.Gray;
+            Panel Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
+            Panel Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
+            Panel ProgresBar = CreateStyledPanel(progresBar, "[white]Прогресс: {completed}/{total}[/]", Color.White, BoxBorder.Rounded);
+            Panel Hello = CreateStyledPanel(hello, "", Color.White,BoxBorder.Rounded);
+            Panel Help = CreateStyledPanel(help, "", Color.White,BoxBorder.Rounded);
+
+
 
             switch(AppState.Mod)
             {
                 case Mods.List:
-                    activeList = Color.White;
-                    activeEdit = Color.Gray;
+                    Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Double);
+                    Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
                     break;
                 case Mods.Edit:
-                    activeList = Color.Gray;
-                    activeEdit = Color.White;
+                    Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
+                    Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Double);
                     break;
                 case Mods.ConfirmDelete:
-                    activeList = Color.Red;
+                    Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.Red,BoxBorder.Double);
                     break;
             }
 
-
-            leftContent = new Panel(View.DrawList(todoList,Navigation,AppState))
-                .Header("Список задач")
-                .Expand()
-                .Border(BoxBorder.Rounded) // Тип границы
-                .Padding(1,1)
-                .BorderColor(activeList); // Тот самый цвет!
-
-            if(todoList.Count > 0)
+            if(todoList.Count < 0)
             {
-                rightContent = new Panel(View.DrawEdit(todoList[AppState.SelectedIndex],AppState))
-                    .Header(" Детали ")
-                    .Expand()
-                    .Border(BoxBorder.Rounded) // Тип границы
-                    .BorderColor(activeEdit);
+                Dital = CreateStyledPanel(new Text("/nНИЧЕГО НЕ НАЙДЕНО"), "ДИТАЛИ", Color.White, BoxBorder.Rounded);
             }
-            else
-            { 
-                rightContent = new Panel(new Text($"\nНичего не найдено..."))
-                    .Header(" Детали ")
-                    .Expand()
-                    .Border(BoxBorder.Rounded) // Тип границы
-                    .BorderColor(activeEdit);
-            }
-
-            int completed = 0;
-            int total = 0;
-            var chat = View.DrawBar(todoList,ref completed,ref total);
-            var Bar = new Panel(chat)
-                .Header($" [white]Прогресс: {completed}/{total}[/] ")
-                .Expand()
-                .Border(BoxBorder.Rounded);
-
+                   
             Text text;
             if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchBuffer + "█", new Style(Color.Yellow));
             else text = new Text(" ");
@@ -71,16 +54,13 @@ namespace Stacly
                 .BorderColor(AppState.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
                 // Цвет рамки меняется, если ищем по тегам!
 
-            var Hello = new Panel(View.DrawHello(AppState))
-                .Expand()
-                .Border(BoxBorder.Rounded);
 
             Window["Search"].Update(searchBox);
-            Window["ProgresBar"].Update(Bar);
-            Window["Tree"].Update(leftContent);
+            Window["ProgresBar"].Update(ProgresBar);
+            Window["Tree"].Update(Tree);
             Window["Hello"].Update(Hello);
-            Window["Details"].Update(rightContent);
-            Window["Comands"].Update(View.DrawStatusBar(AppState));
+            Window["Details"].Update(Dital);
+            Window["Comands"].Update(Help);
 
             return Window;
         }
@@ -109,5 +89,15 @@ namespace Stacly
             return layout;
 
         }
+
+        private static Panel CreateStyledPanel(IRenderable content, string title, Color borderColor, BoxBorder border)
+        {
+            return new Panel(content)
+                .Header($" {title} ")
+                .Border(border)
+                .BorderColor(borderColor)
+                .Expand();
+        }
+
     }
 }
