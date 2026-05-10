@@ -65,7 +65,7 @@ namespace Stacly
         public static Grid DrawEdit(Todo selectTodo,AppState AppState)
         {
             string[] colors = TodoColors(selectTodo);
-            string displayName = (AppState.EditingField == EditingField.Name)
+            string displayName = (AppState.Mod == Mods.Input)
                 ? AppState.Buffer + "_" 
                 : selectTodo.Name;
             string displayDesc = (AppState.EditingField == EditingField.Description) 

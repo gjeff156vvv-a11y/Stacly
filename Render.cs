@@ -18,7 +18,7 @@ namespace Stacly
 
             Panel Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
             Panel Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
-            Panel ProgresBar = CreateStyledPanel(progresBar, "[white]Прогресс: {completed}/{total}[/]", Color.White, BoxBorder.Rounded);
+            Panel ProgresBar = CreateStyledPanel(progresBar, $"[white]Прогресс: {completed}/{total}[/]", Color.White, BoxBorder.Rounded);
             Panel Hello = CreateStyledPanel(hello, "", Color.White,BoxBorder.Rounded);
             Panel Help = CreateStyledPanel(help, "", Color.White,BoxBorder.Rounded);
 
@@ -39,7 +39,7 @@ namespace Stacly
                     break;
             }
 
-            if(todoList.Count < 0)
+            if(todoList.Count <= 0)
             {
                 Dital = CreateStyledPanel(new Text("/nНИЧЕГО НЕ НАЙДЕНО"), "ДИТАЛИ", Color.White, BoxBorder.Rounded);
             }
