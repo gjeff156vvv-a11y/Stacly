@@ -23,6 +23,9 @@ namespace Stacly
                     activeList = Color.Gray;
                     activeEdit = Color.White;
                     break;
+                case Mods.ConfirmDelete:
+                    activeList = Color.Red;
+                    break;
             }
 
 

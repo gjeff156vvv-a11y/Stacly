@@ -7,6 +7,7 @@ namespace Stacly
         List,
         Edit,
         Search,
+        ConfirmDelete,
         Input
     }
 }

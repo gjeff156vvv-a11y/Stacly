@@ -43,6 +43,7 @@ namespace Stacly
                                 case Mods.Edit: EditMode.Mode(todo,ref AppState); break;
                                 case Mods.Input: InputMode.Mode(ref AppState,todo); break;
                                 case Mods.Search: SearchMode.Mode(RootList,AppState);break;
+                                case Mods.ConfirmDelete: ConfirmDeleteMode.Mode(AppState,Navigation,todo);break;
                             }
                             ctx.UpdateTarget(RenderWindow.Render(Window,todo,Navigation,AppState));
                             ctx.Refresh();
