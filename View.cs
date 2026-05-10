@@ -155,8 +155,8 @@ namespace Stacly
             colors[1] = "white";
             switch(todo.Priority)
             {
-                case Priorities.Low: colors[0] = "blue"; break;
-                case Priorities.Medium: colors[0] = "yellow"; break;
+                case Priorities.Low: colors[0] = "yellow"; break;
+                case Priorities.Medium: colors[0] = "blue"; break;
                 case Priorities.High: colors[0] = "red"; break;
                 default: colors[0] = "white"; break; // На всякий случай
             }
