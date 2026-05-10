@@ -7,11 +7,11 @@ namespace TodoList
     {
         public bool IsExpanded = false;
         public int SelectedIndex = 0;
+        public Mods Mod = Mods.List;
 
         //паременты для изменения текстовых значений
         public string Buffer = "";
-        public Mods Mod = Mods.List;
-        public string EditingField = "";
+        public EditingField EditingField = EditingField.Name;
         public Todo? EditingTodo = null;
 
         //паременты для поиска 

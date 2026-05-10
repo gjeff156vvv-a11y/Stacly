@@ -10,7 +10,7 @@ namespace  TodoList
         {
             var newTask = new Todo("", Priorities.Low);
             todoList.Add(newTask);
-            AppState.EditingField = "Name";
+            AppState.EditingField = EditingField.Name;
             AppState.EditingTodo = newTask;
             AppState.Mod = Mods.Input;
         }
@@ -25,7 +25,7 @@ namespace  TodoList
 
         public static void RenameTodo(Todo selectTodo,AppState AppState)
         {
-            AppState.EditingField = "Name";
+            AppState.EditingField = EditingField.Name;
             AppState.EditingTodo = selectTodo;
             AppState.Buffer = selectTodo.Name;
             AppState.Mod = Mods.Input;
@@ -33,7 +33,7 @@ namespace  TodoList
 
         public static void WriteDescription(Todo selectTodo,AppState AppState)
         {
-            AppState.EditingField = "Description";
+            AppState.EditingField = EditingField.Description;
             AppState.EditingTodo = selectTodo;
             AppState.Buffer = selectTodo.Description;
             AppState.Mod = Mods.Input;
@@ -53,7 +53,7 @@ namespace  TodoList
 
         public static void WriteTags(Todo selectTodo,AppState AppState)
         {
-            AppState.EditingField = "Tags";
+            AppState.EditingField = EditingField.Tags;
             AppState.EditingTodo = selectTodo;
             AppState.Buffer = string.Join(", ", selectTodo.Tags);
             AppState.Mod = Mods.Input;

@@ -15,13 +15,12 @@ namespace TodoList
                     // Пользователь закончил ввод
                     switch(AppState.EditingField)
                     {
-                        case "Name": AppState.EditingTodo.ChangeName(AppState.Buffer);break;
-                        case "Description": todoList[AppState.SelectedIndex].ChangeDescription(AppState.Buffer);break;
-                        case "Tags": todoList[AppState.SelectedIndex].ChangeTags(AppState.Buffer);break;
+                        case EditingField.Name:        AppState.EditingTodo.ChangeName(AppState.Buffer);break;
+                        case EditingField.Description: AppState.EditingTodo.ChangeDescription(AppState.Buffer);break;
+                        case EditingField.Tags:        AppState.EditingTodo.ChangeTags(AppState.Buffer);break;
                     }
 
                     AppState.Buffer = ""; // Очищаем черновик
-                    AppState.EditingField = "";
                     AppState.EditingTodo = null;
                     AppState.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
@@ -33,7 +32,6 @@ namespace TodoList
                 
                 case ConsoleKey.Escape:
                     AppState.Buffer = "";
-                    AppState.EditingField = "";
                     AppState.EditingTodo = null;
                     AppState.Mod = Mods.List;
                     break;

@@ -25,7 +25,7 @@ namespace TodoList
                 }
                 else if(AppState.EditingTodo == todoList[i])
                 { 
-                    if(AppState.Mod == Mods.Input && AppState.EditingField == "Name")
+                    if(AppState.Mod == Mods.Input && AppState.EditingField == EditingField.Name)
                     {
                         todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}_[/]");
                     }
@@ -65,14 +65,14 @@ namespace TodoList
         public static Grid DrawEdit(Todo selectTodo,AppState AppState)
         {
             string[] colors = TodoColors(selectTodo);
-            string displayName = (AppState.EditingField == "Name")
+            string displayName = (AppState.EditingField == EditingField.Name)
                 ? AppState.Buffer + "_" 
                 : selectTodo.Name;
-            string displayDesc = (AppState.EditingField == "Description") 
+            string displayDesc = (AppState.EditingField == EditingField.Description) 
                 ? AppState.Buffer + "_" 
                 : selectTodo.Description;
 
-            string displayTags = (AppState.EditingField == "Tags") 
+            string displayTags = (AppState.EditingField == EditingField.Tags) 
                 ? AppState.Buffer + "_" 
                 : string.Join(", ", selectTodo.Tags);
 
