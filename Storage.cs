@@ -24,10 +24,14 @@ namespace Stacly
         {
             using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
             {
-                if(fs.Length <= 0)
-                    return new List<Todo>();
-                else
+                try
+                {
                     return  JsonSerializer.Deserialize<List<Todo>>(fs);         
+                }
+                catch 
+                {
+                    return new List<Todo>(); 
+                }
             }
         }
 
