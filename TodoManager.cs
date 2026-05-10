@@ -69,11 +69,14 @@ namespace  Stacly
 
         public static void PopNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)
         {
+            var parent = Navigation.Peek().Parent;
             if(Navigation.Peek().Parent != null)
             {
                 Navigation.Pop();
             }
-            AppState.SelectedIndex = 0;
+            int foundIndex = Navigation.Peek().Tasks.IndexOf(parent);
+            // Если не нашли или список пуст, ставим 0, иначе найденный индекс
+            AppState.SelectedIndex = foundIndex >= 0 && (foundIndex < Navigation.Peek().Tasks.Count -1) ? foundIndex : 0;
         }
 
         public static void MoveUp(List<Todo> todoList,ref AppState AppState)
