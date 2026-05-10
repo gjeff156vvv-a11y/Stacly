@@ -38,6 +38,7 @@ namespace Stacly
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppState); break;
                 case ConsoleKey.D: AppState.Mod = Mods.ConfirmDelete; break;
                 case ConsoleKey.E: AppState.Mod = Mods.Edit; break;
+                case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppState.SelectedIndex]); break;
                 case ConsoleKey.Tab:AppState.IsExpanded = !AppState.IsExpanded; break;
                 default:if (key.KeyChar == '/') {AppState.SearchBuffer = "";AppState.Mod = Mods.Search;}break;
                 case ConsoleKey.N:
