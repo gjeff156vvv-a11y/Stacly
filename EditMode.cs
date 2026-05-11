@@ -16,11 +16,11 @@ namespace Stacly
 
             switch (key.Key)
             {
-                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,state); break;
-                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,state); break;               
-                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo,state); break;
-                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,state); break;
-                case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
+                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,state); state.IsDirty = true;break;
+                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,state); state.IsDirty = true;break;               
+                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo,state); state.IsDirty = true;break;
+                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,state); state.IsDirty = true;break;
+                case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); state.IsDirty = true;break;
                 case ConsoleKey.Escape: state.Mod = Mods.List; break;
             }
             }
