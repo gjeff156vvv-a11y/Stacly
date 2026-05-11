@@ -15,6 +15,7 @@ namespace Stacly
                 case ConsoleKey.Y: 
                     TodoManager.RemoveTodo(Navigation,Navigation.Peek().Tasks,AppCoordinator);
                     AppCoordinator.IsDirty = true;
+                    AppCoordinator.SetMessage("Удаление прошло успечно",false)
                     AppCoordinator.Mod = Mods.List;
                     break;
                 case ConsoleKey.N: AppCoordinator.Mod = Mods.List;break;

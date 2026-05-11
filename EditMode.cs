@@ -18,7 +18,7 @@ namespace Stacly
             {
                 case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,AppCoordinator); break;
                 case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,AppCoordinator); break;               
-                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo); break;
+                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo,AppCoordinator); break;
                 case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppCoordinator); break;
                 case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
                 case ConsoleKey.Escape: AppCoordinator.Mod = Mods.List; break;

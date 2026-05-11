@@ -43,7 +43,7 @@ namespace  Stacly
 
         }
 
-        public static void CyclePriority(Todo todo)
+        public static void CyclePriority(Todo todo,AppCoordinator state)
         {
             todo.ChangePriority(todo.Priority switch
             {
@@ -52,6 +52,7 @@ namespace  Stacly
                 Priorities.High => Priorities.Low,
         _       => Priorities.Low
             });
+            state.SetMessage($"Приретет изменен на {todo.Priority}",false);
         }
 
         public static void WriteTags(Todo selectTodo,AppCoordinator AppCoordinator)

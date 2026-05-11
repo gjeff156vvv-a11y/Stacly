@@ -41,6 +41,12 @@ namespace Stacly
                     break;
             }
 
+            if(AppCoordinator.Message != null && AppCoordinator.MessageError == true && AppCoordinator.MessageUtil > DateTime.Now)
+                Help = CreateStyledPanel(help, "", Color.Red,BoxBorder.Rounded);
+            else if(AppCoordinator.Message != null && AppCoordinator.MessageError == false && AppCoordinator.MessageUtil > DateTime.Now)
+                Help = CreateStyledPanel(help, "", Color.Yellow,BoxBorder.Rounded);
+            else Help = CreateStyledPanel(help, "", Color.White,BoxBorder.Rounded);
+
                  
             if(AppCoordinator.SearchBuffer.StartsWith("#"))
                 searchBox = CreateStyledPanel(search, "ПОИСК", Color.Magenta, BoxBorder.Rounded);

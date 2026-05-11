@@ -29,5 +29,19 @@ namespace Stacly
         public int FoundMatchIndex = 0;
         public string TagSuggestion = ""; // Хранит найденный вариант (например, "work")
 
+        //сохранения
+        public string? Message {get;private set;}
+        public DateTime MessageUtil {get;private set;}
+        public bool MessageError {get;private set;}
+
+        public void SetMessage(string message,bool error,int second = 3)
+        {
+            Message = message;
+            MessageUtil = DateTime.Now.AddSeconds(second);
+            MessageError = error;
+        }
+
+        
+
     }
 }

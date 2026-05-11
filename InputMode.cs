@@ -24,6 +24,7 @@ namespace Stacly
 
                     AppCoordinator.InputBuffer = ""; // Очищаем черновик
                     AppCoordinator.EditingTodo = null;
+                    AppCoordinator.SetMessage("Изменение сохранины",false);
                     AppCoordinator.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
@@ -44,6 +45,7 @@ namespace Stacly
                     {
                         AppCoordinator.InputBuffer += key.KeyChar;
                     }
+                    else AppCoordinator.SetMessage("Нет такой комманды",false);
                     break;
 
 

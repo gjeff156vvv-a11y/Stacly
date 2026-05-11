@@ -52,13 +52,21 @@ namespace Stacly
                         }
                         break;
 
+                default:
+                    if (key.KeyChar == '/') 
+                    {
+                        AppCoordinator.SearchBuffer = "";
+                        AppCoordinator.Mod = Mods.Search;
+                    }
+                    else AppCoordinator.SetMessage("Нет такой комманды",true);
+                    break;
+
                 case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppCoordinator); break;
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppCoordinator); break;
                 case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete;break;
                 case ConsoleKey.E: AppCoordinator.Mod = Mods.Edit; AppCoordinator.IsDirty = true;break;
-                case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex]); AppCoordinator.IsDirty = true;break;
+                case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex],AppCoordinator); AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.Tab:AppCoordinator.IsExpanded = !AppCoordinator.IsExpanded; break;
-                default:if (key.KeyChar == '/') {AppCoordinator.SearchBuffer = "";AppCoordinator.Mod = Mods.Search;}break;
                 case ConsoleKey.Spacebar: todoList[AppCoordinator.SelectedIndex].ChangeIsCompleted();AppCoordinator.IsDirty = true ; break;
                 case ConsoleKey.Escape:AppCoordinator.SearchBuffer = "";AppCoordinator.FoundItems = null;break;
                 case ConsoleKey.Q: Running = false; return;

@@ -146,16 +146,26 @@ namespace Stacly
         public static Markup DrawStatusBar(AppCoordinator state)
         {
             string text = "";
-
-            switch(state.Mod)
+            if(state.Message == null || state.MessageUtil <= DateTime.Now)
             {
-                case Mods.List: text = "[bold aqua]j/k[/] [gray]move[/] | [bold aqua]Shift+j/k[/] [gray]reorder[/] | [bold aqua]h/l[/] [gray]up/in[/] | [bold aqua]Space[/] [gray]done[/] | [bold aqua]n/N[/] [gray]new/find[/] | [bold aqua]d[/] [gray]del[/] | [bold aqua]/[/] [gray]search[/] | [bold aqua]q[/] [gray]quit[/]";break;
-                case Mods.Edit: text = "[bold yellow]r[/] [gray]rename[/] | [bold yellow]d[/] [gray]desc[/] | [bold yellow]p[/] [gray]priority[/] | [bold yellow]t[/] [gray]tags[/] | [bold red]Esc[/] [gray]back[/]";break;
-                case Mods.Input: text = "[bold green]Enter[/] [gray]save[/] | [bold red]Esc[/] [gray]cancel[/]";break;
-                case Mods.Search:text = "[bold orange1]Enter/Esc[/] [gray]finish[/] | [bold gray]Type to filter...[/]";break;
-                default: text = "";break;
-                case Mods.ConfirmDelete: text = "[bold yellow]Потвердити удаление: [/][green]Y[/] / [red] N [/]";break;
+                switch(state.Mod)
+                {
+                    case Mods.List: text = "[bold aqua]j/k[/] [gray]move[/] | [bold aqua]Shift+j/k[/] [gray]reorder[/] | [bold aqua]h/l[/] [gray]up/in[/] | [bold aqua]Space[/] [gray]done[/] | [bold aqua]n/N[/] [gray]new/find[/] | [bold aqua]d[/] [gray]del[/] | [bold aqua]/[/] [gray]search[/] | [bold aqua]q[/] [gray]quit[/]";break;
+                    case Mods.Edit: text = "[bold yellow]r[/] [gray]rename[/] | [bold yellow]d[/] [gray]desc[/] | [bold yellow]p[/] [gray]priority[/] | [bold yellow]t[/] [gray]tags[/] | [bold red]Esc[/] [gray]back[/]";break;
+                    case Mods.Input: text = "[bold green]Enter[/] [gray]save[/] | [bold red]Esc[/] [gray]cancel[/]";break;
+                    case Mods.Search:text = "[bold orange1]Enter/Esc[/] [gray]finish[/] | [bold gray]Type to filter...[/]";break;
+                    default: text = "";break;
+                    case Mods.ConfirmDelete: text = "[bold yellow]Потвердити удаление: [/][green]Y[/] / [red] N [/]";break;
+                }
             }
+            else
+            {
+                string color;
+                if(state.MessageError == true) color = "red";
+                else color = "yellow";
+                text = $"[{color}]{state.Message}[/]";
+            }
+
             var help = new Markup(text);
 
             return help;
