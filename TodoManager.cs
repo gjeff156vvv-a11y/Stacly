@@ -111,25 +111,33 @@ namespace  Stacly
 
         public static void MoveUpSearch(AppCoordinator AppCoordinator,List<Todo> todoList)
         {
-            if(AppCoordinator.FoundMatchIndex > 0)
+            // Если мы НЕ на первом элементе — идем вверх
+            if (AppCoordinator.FoundMatchIndex > 0)
             {
-                AppCoordinator.FoundMatchIndex = AppCoordinator.FoundItems.Count -1;
+                AppCoordinator.FoundMatchIndex--;
             }
-            AppCoordinator.FoundMatchIndex--;
+            else // Если мы на самом верху — прыгаем в конец
+            {
+                AppCoordinator.FoundMatchIndex = AppCoordinator.FoundItems.Count - 1;
+            }
             int index = todoList.IndexOf(AppCoordinator.FoundItems[AppCoordinator.FoundMatchIndex]);
             AppCoordinator.SelectedIndex = index;
         }
 
         public static void MoveDownSearch(AppCoordinator AppCoordinator,List<Todo> todoList)
         {
-            if(AppCoordinator.FoundMatchIndex < AppCoordinator.FoundItems.Count -1)
+            // Если мы НЕ на последнем элементе — просто идем вниз
+            if (AppCoordinator.FoundMatchIndex < AppCoordinator.FoundItems.Count - 1)
             {
-                AppCoordinator.FoundMatchIndex = 0;     
+                AppCoordinator.FoundMatchIndex++;
             }
-            AppCoordinator.FoundMatchIndex++;
+            else // Если мы уже на последнем — прыгаем в начало
+            {
+                AppCoordinator.FoundMatchIndex = 0;
+            }
+            // И ТОЛЬКО ПОТОМ берем элемент из списка
             int index = todoList.IndexOf(AppCoordinator.FoundItems[AppCoordinator.FoundMatchIndex]);
             AppCoordinator.SelectedIndex = index;
-
         }
 
         public static (int completed, int total) GetDeepProgress(IEnumerable<Todo> tasks)
