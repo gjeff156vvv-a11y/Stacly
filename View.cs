@@ -77,17 +77,15 @@ namespace Stacly
             {
                 var selectTodo = todoList[state.SelectedIndex];
                 string[] colors = GetThemeForTodo(selectTodo);
-                string displayName = (state.Mod == Mods.Input)
-                    ? state.InputBuffer + FlashCursor()
-                    : selectTodo.Name;
-                string displayDesc = (state.EditingField == EditingField.Description) 
-                    ? state.InputBuffer + FlashCursor()
-                    : selectTodo.Description;
-
-                string displayTags = (state.EditingField == EditingField.Tags) 
-                    ? state.InputBuffer + FlashCursor()
-                    : string.Join(", ", selectTodo.Tags);
-
+                string displayName = selectTodo.Name;
+                string displayDesc = selectTodo.Description;
+                string displayTags = string.Join(", ", selectTodo.Tags);  
+                switch(state.EditingField)
+                {
+                    case EditingField.Name: displayName = state.InputBuffer + FlashCursor();break;
+                    case EditingField.Tags:displayTags = state.InputBuffer + FlashCursor();break;
+                    case EditingField.Description:displayDesc = state.InputBuffer + FlashCursor();break;
+                };
             
                 grid.AddRow("");
                 grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{displayName}[/]");

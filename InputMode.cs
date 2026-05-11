@@ -24,6 +24,7 @@ namespace Stacly
 
                     state.InputBuffer = ""; // Очищаем черновик
                     state.EditingTodo = null;
+                    state.EditingField = EditingField.Default;
                     state.SetMessage("Изменение сохранины",false);
                     state.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;

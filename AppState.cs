@@ -27,7 +27,7 @@ namespace Stacly
 
         //паременты для изменения текстовых значений
         public string InputBuffer = "";
-        public EditingField EditingField = EditingField.Name;
+        public EditingField EditingField = EditingField.Default;
         public Todo? EditingTodo = null;
 
         //паременты для поиска 

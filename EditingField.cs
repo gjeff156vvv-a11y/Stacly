@@ -6,6 +6,7 @@ namespace Stacly
     {
         Name,
         Description,
+        Default,
         Tags
     }
 }
