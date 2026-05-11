@@ -17,10 +17,13 @@ namespace  Stacly
 
         public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,AppCoordinator AppCoordinator)
         {
+            Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
             if (todoList.Count > 0) 
             {
-                Navigation.Peek().Tasks.Remove(todoList[AppCoordinator.SelectedIndex]);
+                Navigation.Peek().Tasks.Remove(selectTodo);
             }
+            AppCoordinator.SelectedIndex = Math.Clamp(AppCoordinator.SelectedIndex, 0, Math.Max(0, todoList.Count - 1));
+
         }
 
         public static void RenameTodo(Todo selectTodo,AppCoordinator AppCoordinator)
