@@ -135,7 +135,7 @@ namespace Stacly
             // Примерная идея для содержимого:
             var grid = new Grid().AddColumn();
             grid.AddRow("");
-            grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v1.0[/]");
+            grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v2.0[/]");
             grid.AddRow("");
             grid.AddRow($"[yellow]Mode:[/] [invert]{state.Mod}[/]");
             //grid.AddRow($"[blue]Total Tasks:[/] {TodoManager.GetDeepProgress(rootList).total}");
