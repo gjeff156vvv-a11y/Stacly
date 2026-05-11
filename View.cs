@@ -10,33 +10,37 @@ namespace Stacly
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
-                tree = new Tree("TodoList");
+                tree = new Tree("TodoList").Guide(TreeGuide.Ascii).Style(Style.Parse("grey bold"));
             else 
-                tree = new Tree(Navigation.Peek().Parent.Name);
+                tree = new Tree(Navigation.Peek().Parent.Name).Guide(TreeGuide.Ascii).Style(Style.Parse("grey bold"));
 
             for (int i = 0; i < todoList.Count; i++)
             {
                 string[] colors = GetThemeForTodo(todoList[i]);
                 TreeNode todo = null;
+                string date;
+                if(todoList[i].IsCompleted == true) 
+                    date = TodoManager.RelativeTime(todoList[i].CompleteAt);
+                else date = TodoManager.RelativeTime(todoList[i].CreatedAt);
 
                 if(AppCoordinator.SelectedIndex == i)
                 {
-                    todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                    todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                 }
                 else if(AppCoordinator.EditingTodo == todoList[i])
                 { 
                     if(AppCoordinator.Mod == Mods.Input && AppCoordinator.EditingField == EditingField.Name)
                     {
-                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}_[/]");
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}_[/]{-10}[{colors[1]}]{date}[/] ");
                     }
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(AppCoordinator.SearchBuffer.ToLower().Trim()) && AppCoordinator.FoundItems.Contains(todoList[i])) 
                     {
-                        todo = tree.AddNode($"[DarkOrange]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                        todo = tree.AddNode($"[DarkOrange]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                     }
-                    else todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
+                    else todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                 }
 
                 if(AppCoordinator.IsExpanded  == true && todo != null)
@@ -186,5 +190,6 @@ namespace Stacly
             colors[2] = todo.IsCompleted ? "[x]" : "[ ]";
             return colors;
         }
+
     }
 }
