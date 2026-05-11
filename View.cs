@@ -140,6 +140,7 @@ namespace Stacly
                 case Mods.Input: text = "[bold green]Enter[/] [gray]save[/] | [bold red]Esc[/] [gray]cancel[/]";break;
                 case Mods.Search:text = "[bold orange1]Enter/Esc[/] [gray]finish[/] | [bold gray]Type to filter...[/]";break;
                 default: text = "";break;
+                case Mods.ConfirmDelete: text = "[bold yellow]Потвердити удаление: [/][green]Y[/] / [red] N [/]";break;
             }
             var help = new Markup(text);
 
