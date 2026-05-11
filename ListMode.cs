@@ -23,6 +23,7 @@ namespace Stacly
                             AppCoordinator.SelectedIndex = 0;
                     }
                     break;
+
                 case ConsoleKey.K: 
                     if((key.Modifiers & ConsoleModifiers.Shift) != 0)
                         TodoManager.MoveUp(todoList,ref AppCoordinator);
@@ -34,18 +35,24 @@ namespace Stacly
                             AppCoordinator.SelectedIndex = todoList.Count -1;
                     }
                     break;
+
                 case ConsoleKey.N:
                         if(AppCoordinator.SearchBuffer == "" && AppCoordinator.FoundItems == null)
+                        {
                             TodoManager.AddTodo(Navigation.Peek().Tasks,ref AppCoordinator);
-                        else{
+                            AppCoordinator.IsDirty = true;
+                        }
+                        else
+                        {
                            if((key.Modifiers & ConsoleModifiers.Shift) != 0)
                                TodoManager.MoveUpSearch(AppCoordinator,todoList);
                            else TodoManager.MoveDownSearch(AppCoordinator,todoList);
                         }
                         break;
+
                 case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppCoordinator); break;
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppCoordinator); break;
-                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete; break;
+                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete; AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.E: AppCoordinator.Mod = Mods.Edit; AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex]); AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.Tab:AppCoordinator.IsExpanded = !AppCoordinator.IsExpanded; break;

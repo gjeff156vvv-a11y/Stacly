@@ -31,14 +31,6 @@ namespace Stacly
 
                         while(Running)
                         {
-                            if(AppCoordinator.IsDirty == true) 
-                            {
-                                currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
-                                AppCoordinator.IsDirty = false;
-                            }
-
-                            ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
-                            ctx.Refresh();
                             switch(AppCoordinator.Mod)
                             {
                                 case Mods.List: ListMode.ProcessKey(Navigation,currentList,ref AppCoordinator,ref Running); break;
@@ -47,9 +39,14 @@ namespace Stacly
                                 case Mods.Search: SearchMode.ProcessKey(AppCoordinator);break;
                                 case Mods.ConfirmDelete: ConfirmDeleteMode.ProcessKey(AppCoordinator,Navigation,currentList);break;
                             }
+                            if(AppCoordinator.IsDirty == true) 
+                            {
+                                currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
+                                AppCoordinator.IsDirty = false;
+                                Storage.SaveAll(AppCoordinator.RootList);
+                            }
                             ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
                             ctx.Refresh();
-                            Storage.SaveAll(AppCoordinator.RootList);
                         }
                     });
         }
