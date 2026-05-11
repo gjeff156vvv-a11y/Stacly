@@ -1,19 +1,21 @@
 # 🟦 Stackly (Vim-style TUI Todo)
 
-Минималистичный терминальный менеджер задач на C# с управлением в стиле Vim и эстетикой .
+A minimalist C# terminal task manager with Vim-style controls.
 
-## ✨ Особенности
-- **Vim-навигация**: `j/k` для перемещения, `h/l` для вложенности, `/` для поиска.
-- **Рекурсия**: Поддержка бесконечных подзадач.
-- **Живой UI**: На базе `Spectre.Console` с мгновенным обновлением без мерцания.
-- **Умный поиск**: Фильтрация по именам и тегам (`#tag`).
-- **Инлайн-редактирование**: Правка задач прямо в интерфейсе.
+## ✨ Features
+- **Vim navigation**: `j/k` for moving, `h/l` for nesting, `/` for searching.
+- **Recursion**: Support for infinite subtasks.
+- **Live UI**: Based on `Spectre.Console` with instant, flicker-free updates.
+- **Smart search**: Filter by names and tags (`#tag`).
+- **Inline editing**: Edit tasks directly in the interface.
 
-## ⌨️ Горячие клавиши
-- `j`/`k` — Вверх/Вниз
-- `Shift + j/k` — Переместить задачу
-- `h`/`l` — Выйти/Войти в подзадачи
-- `Space` — Отметить выполнение
-- `n` — Новая задача (или навигация по поиску)
-- `/` — Поиск
-- `q` — Выход
+## ⌨️ Keyboard Shortcuts
+- `j`/`k` — Up/Down
+- `Shift + j/k` — Move task
+- `h`/`l` — Exit/Enter subtasks
+- `Space` — Mark as complete
+- `n` — New task (or search navigation)
+- `/` — Search
+- `q` — Exit
+
+
