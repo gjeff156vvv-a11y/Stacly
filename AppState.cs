@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace Stacly
 {
-    public class AppState 
+    public class AppCoordinator 
     {
         public bool IsExpanded = false;
         public int SelectedIndex = 0;
         public Mods Mod = Mods.List;
 
         //паременты для изменения текстовых значений
-        public string Buffer = "";
+        public string InputBuffer = "";
         public EditingField EditingField = EditingField.Name;
         public Todo? EditingTodo = null;
 
         //паременты для поиска 
         public string SearchBuffer = "";
         public List<Todo> FoundItems = null;
-        public int CurentFoundMatch = 0;
+        public int FoundMatchIndex = 0;
     }
 }

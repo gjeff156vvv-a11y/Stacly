@@ -5,21 +5,21 @@ namespace Stacly
 {
     static class EditMode
     {
-         public static void Mode(List<Todo> todoList,ref AppState AppState)
+         public static void ProcessKey(List<Todo> todoList,ref AppCoordinator AppCoordinator)
          {
-            Todo selectTodo = todoList[AppState.SelectedIndex];
+            Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
            
             // Читаем нажатие клавиши БЕЗ ожидания Enter
             var key = Console.ReadKey(true);
 
             switch (key.Key)
             {
-                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,AppState); break;
-                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,AppState); break;               
+                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,AppCoordinator); break;
+                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,AppCoordinator); break;               
                 case ConsoleKey.P: TodoManager.CyclePriority(selectTodo); break;
-                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppState); break;
+                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppCoordinator); break;
                 case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
-                case ConsoleKey.Escape: AppState.Mod = Mods.List; break;
+                case ConsoleKey.Escape: AppCoordinator.Mod = Mods.List; break;
             }
          }
     }

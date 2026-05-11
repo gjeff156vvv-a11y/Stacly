@@ -6,37 +6,37 @@ namespace  Stacly
 {
     public static class TodoManager
     {
-        public static void AddTodo(List<Todo> todoList,ref AppState AppState)
+        public static void AddTodo(List<Todo> todoList,ref AppCoordinator AppCoordinator)
         {
             var newTask = new Todo("", Priorities.Low);
             todoList.Add(newTask);
-            AppState.EditingField = EditingField.Name;
-            AppState.EditingTodo = newTask;
-            AppState.Mod = Mods.Input;
+            AppCoordinator.EditingField = EditingField.Name;
+            AppCoordinator.EditingTodo = newTask;
+            AppCoordinator.Mod = Mods.Input;
         }
 
-        public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,AppState AppState)
+        public static void RemoveTodo(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,AppCoordinator AppCoordinator)
         {
             if (todoList.Count > 0) 
             {
-                Navigation.Peek().Tasks.Remove(todoList[AppState.SelectedIndex]);
+                Navigation.Peek().Tasks.Remove(todoList[AppCoordinator.SelectedIndex]);
             }
         }
 
-        public static void RenameTodo(Todo selectTodo,AppState AppState)
+        public static void RenameTodo(Todo selectTodo,AppCoordinator AppCoordinator)
         {
-            AppState.EditingField = EditingField.Name;
-            AppState.EditingTodo = selectTodo;
-            AppState.Buffer = selectTodo.Name;
-            AppState.Mod = Mods.Input;
+            AppCoordinator.EditingField = EditingField.Name;
+            AppCoordinator.EditingTodo = selectTodo;
+            AppCoordinator.InputBuffer = selectTodo.Name;
+            AppCoordinator.Mod = Mods.Input;
         }
 
-        public static void WriteDescription(Todo selectTodo,AppState AppState)
+        public static void WriteDescription(Todo selectTodo,AppCoordinator AppCoordinator)
         {
-            AppState.EditingField = EditingField.Description;
-            AppState.EditingTodo = selectTodo;
-            AppState.Buffer = selectTodo.Description;
-            AppState.Mod = Mods.Input;
+            AppCoordinator.EditingField = EditingField.Description;
+            AppCoordinator.EditingTodo = selectTodo;
+            AppCoordinator.InputBuffer = selectTodo.Description;
+            AppCoordinator.Mod = Mods.Input;
 
         }
 
@@ -51,23 +51,23 @@ namespace  Stacly
             });
         }
 
-        public static void WriteTags(Todo selectTodo,AppState AppState)
+        public static void WriteTags(Todo selectTodo,AppCoordinator AppCoordinator)
         {
-            AppState.EditingField = EditingField.Tags;
-            AppState.EditingTodo = selectTodo;
-            AppState.Buffer = string.Join(", ", selectTodo.Tags);
-            AppState.Mod = Mods.Input;
+            AppCoordinator.EditingField = EditingField.Tags;
+            AppCoordinator.EditingTodo = selectTodo;
+            AppCoordinator.InputBuffer = string.Join(", ", selectTodo.Tags);
+            AppCoordinator.Mod = Mods.Input;
 
         }
 
-        public static void PushNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)
+        public static void PushNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppCoordinator AppCoordinator)
         {
-            Navigation.Push(((Navigation.Peek().Tasks[AppState.SelectedIndex].SubTasks),Navigation.Peek().Tasks[AppState.SelectedIndex]));
+            Navigation.Push(((Navigation.Peek().Tasks[AppCoordinator.SelectedIndex].SubTasks),Navigation.Peek().Tasks[AppCoordinator.SelectedIndex]));
             //if(Navigation.Peek().Tasks.Count == 0)TodoManager.AddTodo(Navigation.Peek().Tasks);
-            AppState.SelectedIndex = 0;
+            AppCoordinator.SelectedIndex = 0;
         }
 
-        public static void PopNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppState AppState)
+        public static void PopNavigation(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,ref AppCoordinator AppCoordinator)
         {
             var parent = Navigation.Peek().Parent;
             if(Navigation.Peek().Parent != null)
@@ -76,31 +76,31 @@ namespace  Stacly
             }
             int foundIndex = Navigation.Peek().Tasks.IndexOf(parent);
             // Если не нашли или список пуст, ставим 0, иначе найденный индекс
-            AppState.SelectedIndex = foundIndex >= 0 && (foundIndex < Navigation.Peek().Tasks.Count -1) ? foundIndex : 0;
+            AppCoordinator.SelectedIndex = foundIndex >= 0 && (foundIndex < Navigation.Peek().Tasks.Count -1) ? foundIndex : 0;
         }
 
-        public static void MoveUp(List<Todo> todoList,ref AppState AppState)
+        public static void MoveUp(List<Todo> todoList,ref AppCoordinator AppCoordinator)
         {
-            if(AppState.SelectedIndex > 0)       
+            if(AppCoordinator.SelectedIndex > 0)       
             {
-                Todo selectTodo = todoList[AppState.SelectedIndex];
-                todoList.RemoveAt(AppState.SelectedIndex);
-                todoList.Insert(AppState.SelectedIndex - 1,selectTodo);
-                AppState.SelectedIndex--;
+                Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
+                todoList.RemoveAt(AppCoordinator.SelectedIndex);
+                todoList.Insert(AppCoordinator.SelectedIndex - 1,selectTodo);
+                AppCoordinator.SelectedIndex--;
             }
         }
-        public static void MoveDown(List<Todo> todoList,ref AppState AppState)
+        public static void MoveDown(List<Todo> todoList,ref AppCoordinator AppCoordinator)
         {
-            if(AppState.SelectedIndex < todoList.Count -1)       
+            if(AppCoordinator.SelectedIndex < todoList.Count -1)       
             {
-                Todo selectTodo = todoList[AppState.SelectedIndex];
-                todoList.RemoveAt(AppState.SelectedIndex);
-                todoList.Insert(AppState.SelectedIndex + 1,selectTodo);
-                AppState.SelectedIndex++;
+                Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
+                todoList.RemoveAt(AppCoordinator.SelectedIndex);
+                todoList.Insert(AppCoordinator.SelectedIndex + 1,selectTodo);
+                AppCoordinator.SelectedIndex++;
             }
         }
 
-        public static List<Todo> Sort(List<Todo> list,AppState AppState)
+        public static List<Todo> Sort(List<Todo> list,AppCoordinator AppCoordinator)
         {
             var displayList = list
                 .OrderBy(t => t.IsCompleted)        // Сначала невыполненные (false < true)
@@ -109,26 +109,26 @@ namespace  Stacly
             return displayList;
         }
 
-        public static void MoveUpSearch(AppState AppState,List<Todo> todoList)
+        public static void MoveUpSearch(AppCoordinator AppCoordinator,List<Todo> todoList)
         {
-            if(AppState.CurentFoundMatch > 0)
+            if(AppCoordinator.FoundMatchIndex > 0)
             {
-                AppState.CurentFoundMatch = AppState.FoundItems.Count -1;
+                AppCoordinator.FoundMatchIndex = AppCoordinator.FoundItems.Count -1;
             }
-            AppState.CurentFoundMatch--;
-            int index = todoList.IndexOf(AppState.FoundItems[AppState.CurentFoundMatch]);
-            AppState.SelectedIndex = index;
+            AppCoordinator.FoundMatchIndex--;
+            int index = todoList.IndexOf(AppCoordinator.FoundItems[AppCoordinator.FoundMatchIndex]);
+            AppCoordinator.SelectedIndex = index;
         }
 
-        public static void MoveDownSearch(AppState AppState,List<Todo> todoList)
+        public static void MoveDownSearch(AppCoordinator AppCoordinator,List<Todo> todoList)
         {
-            if(AppState.CurentFoundMatch < AppState.FoundItems.Count -1)
+            if(AppCoordinator.FoundMatchIndex < AppCoordinator.FoundItems.Count -1)
             {
-                AppState.CurentFoundMatch = 0;     
+                AppCoordinator.FoundMatchIndex = 0;     
             }
-            AppState.CurentFoundMatch++;
-            int index = todoList.IndexOf(AppState.FoundItems[AppState.CurentFoundMatch]);
-            AppState.SelectedIndex = index;
+            AppCoordinator.FoundMatchIndex++;
+            int index = todoList.IndexOf(AppCoordinator.FoundItems[AppCoordinator.FoundMatchIndex]);
+            AppCoordinator.SelectedIndex = index;
 
         }
 

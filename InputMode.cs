@@ -4,7 +4,7 @@ namespace Stacly
 {
     static class InputMode
     {
-        public static void Mode(ref AppState AppState,List<Todo> todoList)
+        public static void ProcessKey(ref AppCoordinator AppCoordinator,List<Todo> todoList)
         { 
             // Читаем ТОЛЬКО ОДНУ клавишу
             var key = Console.ReadKey(true); 
@@ -13,34 +13,34 @@ namespace Stacly
             {
                 case ConsoleKey.Enter:
                     // Пользователь закончил ввод
-                    switch(AppState.EditingField)
+                    switch(AppCoordinator.EditingField)
                     {
-                        case EditingField.Name:        AppState.EditingTodo.ChangeName(AppState.Buffer);break;
-                        case EditingField.Description: AppState.EditingTodo.ChangeDescription(AppState.Buffer);break;
-                        case EditingField.Tags:        AppState.EditingTodo.ChangeTags(AppState.Buffer);break;
+                        case EditingField.Name:        AppCoordinator.EditingTodo.ChangeName(AppCoordinator.InputBuffer);break;
+                        case EditingField.Description: AppCoordinator.EditingTodo.ChangeDescription(AppCoordinator.InputBuffer);break;
+                        case EditingField.Tags:        AppCoordinator.EditingTodo.ChangeTags(AppCoordinator.InputBuffer);break;
                     }
 
-                    AppState.Buffer = ""; // Очищаем черновик
-                    AppState.EditingTodo = null;
-                    AppState.Mod = Mods.List; // Возвращаемся в обычный режим
+                    AppCoordinator.InputBuffer = ""; // Очищаем черновик
+                    AppCoordinator.EditingTodo = null;
+                    AppCoordinator.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
                 case ConsoleKey.Backspace:
-                    if (AppState.Buffer.Length > 0)
-                    AppState.Buffer = AppState.Buffer[..^1];
+                    if (AppCoordinator.InputBuffer.Length > 0)
+                    AppCoordinator.InputBuffer = AppCoordinator.InputBuffer[..^1];
                     break;
                 
                 case ConsoleKey.Escape:
-                    AppState.Buffer = "";
-                    AppState.EditingTodo = null;
-                    AppState.Mod = Mods.List;
+                    AppCoordinator.InputBuffer = "";
+                    AppCoordinator.EditingTodo = null;
+                    AppCoordinator.Mod = Mods.List;
                     break;
 
                 default:
                     // Если это обычная буква или цифра
                     if (!char.IsControl(key.KeyChar))
                     {
-                        AppState.Buffer += key.KeyChar;
+                        AppCoordinator.InputBuffer += key.KeyChar;
                     }
                     break;
 

@@ -3,10 +3,10 @@ using Spectre.Console;
 
 namespace Stacly
 {
-    static class View
+    static class ComponentRenderer
     {
 
-        public static Tree DrawList(List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
+        public static Tree DrawList(List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator AppCoordinator)
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
@@ -16,30 +16,30 @@ namespace Stacly
 
             for (int i = 0; i < todoList.Count; i++)
             {
-                string[] colors = TodoColors(todoList[i]);
+                string[] colors = GetThemeForTodo(todoList[i]);
                 TreeNode todo = null;
 
-                if(AppState.SelectedIndex == i)
+                if(AppCoordinator.SelectedIndex == i)
                 {
                     todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
-                else if(AppState.EditingTodo == todoList[i])
+                else if(AppCoordinator.EditingTodo == todoList[i])
                 { 
-                    if(AppState.Mod == Mods.Input && AppState.EditingField == EditingField.Name)
+                    if(AppCoordinator.Mod == Mods.Input && AppCoordinator.EditingField == EditingField.Name)
                     {
-                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppState.Buffer}_[/]");
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}_[/]");
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(AppState.SearchBuffer.ToLower().Trim()) && AppState.FoundItems.Contains(todoList[i])) 
+                    if (!string.IsNullOrEmpty(AppCoordinator.SearchBuffer.ToLower().Trim()) && AppCoordinator.FoundItems.Contains(todoList[i])) 
                     {
                         todo = tree.AddNode($"[DarkOrange]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                     }
                     else todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name}[/]");
                 }
 
-                if(AppState.IsExpanded  == true && todo != null)
+                if(AppCoordinator.IsExpanded  == true && todo != null)
                 {
                      AddNodeRecurse(todo,todoList[i].SubTasks);
                 }
@@ -51,7 +51,7 @@ namespace Stacly
         {
             for(var i = 0; i < todoList.Count;i++)
             {
-                string[]  colors = TodoColors(todoList[i]);
+                string[]  colors = GetThemeForTodo(todoList[i]);
                 if(todoList.Count <= 0)return;
                 else
                 {
@@ -62,18 +62,18 @@ namespace Stacly
 
         }
 
-        public static Grid DrawEdit(Todo selectTodo,AppState AppState)
+        public static Grid DrawEdit(Todo selectTodo,AppCoordinator AppCoordinator)
         {
-            string[] colors = TodoColors(selectTodo);
-            string displayName = (AppState.Mod == Mods.Input)
-                ? AppState.Buffer + "_" 
+            string[] colors = GetThemeForTodo(selectTodo);
+            string displayName = (AppCoordinator.Mod == Mods.Input)
+                ? AppCoordinator.InputBuffer + "_" 
                 : selectTodo.Name;
-            string displayDesc = (AppState.EditingField == EditingField.Description) 
-                ? AppState.Buffer + "_" 
+            string displayDesc = (AppCoordinator.EditingField == EditingField.Description) 
+                ? AppCoordinator.InputBuffer + "_" 
                 : selectTodo.Description;
 
-            string displayTags = (AppState.EditingField == EditingField.Tags) 
-                ? AppState.Buffer + "_" 
+            string displayTags = (AppCoordinator.EditingField == EditingField.Tags) 
+                ? AppCoordinator.InputBuffer + "_" 
                 : string.Join(", ", selectTodo.Tags);
 
             var grid = new Grid();
@@ -116,20 +116,20 @@ namespace Stacly
             return chart;
         }
 
-        public static Grid DrawHello(AppState AppState)
+        public static Grid DrawHello(AppCoordinator AppCoordinator)
         {
             // Примерная идея для содержимого:
             var grid = new Grid().AddColumn();
             grid.AddRow("");
             grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v1.0[/]");
             grid.AddRow("");
-            grid.AddRow($"[yellow]Mode:[/] [invert]{AppState.Mod}[/]");
+            grid.AddRow($"[yellow]Mode:[/] [invert]{AppCoordinator.Mod}[/]");
             //grid.AddRow($"[blue]Total Tasks:[/] {TodoManager.GetDeepProgress(rootList).total}");
             return grid;
 
         }
 
-        public static Markup DrawStatusBar(AppState state)
+        public static Markup DrawStatusBar(AppCoordinator state)
         {
             string text = "";
 
@@ -147,7 +147,7 @@ namespace Stacly
         }
 
 
-        private static string[] TodoColors(Todo todo)
+        private static string[] GetThemeForTodo(Todo todo)
         {
             string[] colors = new string[3];
             colors[0] = "white";

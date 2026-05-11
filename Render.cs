@@ -6,15 +6,15 @@ namespace Stacly
 {
     static class RenderWindow
     {
-        public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppState AppState)
+        public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator AppCoordinator)
         {
             //сылки на контент
-            var tree = View.DrawList(todoList,Navigation,AppState);
-            var dital = View.DrawEdit(todoList[AppState.SelectedIndex],AppState);
+            var tree = ComponentRenderer.DrawList(todoList,Navigation,AppCoordinator);
+            var dital = ComponentRenderer.DrawEdit(todoList[AppCoordinator.SelectedIndex],AppCoordinator);
             int total = 0, completed = 0;
-            var progresBar = View.DrawBar(todoList,ref completed,ref total);
-            var hello = View.DrawHello(AppState);
-            var help = View.DrawStatusBar(AppState);
+            var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total);
+            var hello = ComponentRenderer.DrawHello(AppCoordinator);
+            var help = ComponentRenderer.DrawStatusBar(AppCoordinator);
 
             Panel Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
             Panel Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
@@ -24,7 +24,7 @@ namespace Stacly
 
 
 
-            switch(AppState.Mod)
+            switch(AppCoordinator.Mod)
             {
                 case Mods.List:
                     Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Double);
@@ -45,13 +45,13 @@ namespace Stacly
             }
                    
             Text text;
-            if(AppState.Mod == Mods.Search) text = new Text(AppState.SearchBuffer + "█", new Style(Color.Yellow));
+            if(AppCoordinator.Mod == Mods.Search) text = new Text(AppCoordinator.SearchBuffer + "█", new Style(Color.Yellow));
             else text = new Text(" ");
             var searchBox = new Panel(text)
                 .Header(" ПОИСК ")
                 .Border(BoxBorder.Rounded)
                 .Expand()
-                .BorderColor(AppState.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
+                .BorderColor(AppCoordinator.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
                 // Цвет рамки меняется, если ищем по тегам!
 
 
@@ -65,7 +65,7 @@ namespace Stacly
             return Window;
         }
 
-        public static Layout CreatWindow()
+        public static Layout InitializeLayout()
         {
             var layout = new Layout("Root")
                 .SplitRows(

@@ -5,7 +5,7 @@ namespace Stacly
 {
     static class SearchMode
     {
-        public static void Mode(List<Todo> todoList,AppState AppState)
+        public static void ProcessKey(List<Todo> todoList,AppCoordinator AppCoordinator)
         {
             var Key = Console.ReadKey(true);
 
@@ -13,34 +13,34 @@ namespace Stacly
             {
                 case ConsoleKey.Enter:
                     // Пользователь закончил ввод
-                    AppState.Mod = Mods.List; // Возвращаемся в обычный режим
+                    AppCoordinator.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
                 case ConsoleKey.Backspace:
-                    if (AppState.SearchBuffer.Length > 0)
-                    AppState.SearchBuffer = AppState.SearchBuffer[..^1];
+                    if (AppCoordinator.SearchBuffer.Length > 0)
+                    AppCoordinator.SearchBuffer = AppCoordinator.SearchBuffer[..^1];
                     break;
                 
                 case ConsoleKey.Escape:
-                    AppState.SearchBuffer = "";
-                    AppState.Mod = Mods.List;
+                    AppCoordinator.SearchBuffer = "";
+                    AppCoordinator.Mod = Mods.List;
                     break;
 
                 default:
                     // Если это обычная буква или цифра
                     if (!char.IsControl(Key.KeyChar))
                     {
-                        AppState.SearchBuffer += Key.KeyChar;
+                        AppCoordinator.SearchBuffer += Key.KeyChar;
                     }
                     break;
             }
             // 1. Получаем "плоский" список всех задач (включая подзадачи)
             var allTasks = GetAllTasks(todoList);
 
-            var queryRaw = AppState.SearchBuffer.ToLower().Trim();
+            var queryRaw = AppCoordinator.SearchBuffer.ToLower().Trim();
             var parts = queryRaw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            AppState.FoundItems = allTasks.Where(t => {
+            AppCoordinator.FoundItems = allTasks.Where(t => {
                 if (parts.Length == 0) return true;
 
                 // Задача должна содержать ВСЕ слова из поиска
