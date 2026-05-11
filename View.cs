@@ -79,7 +79,8 @@ namespace Stacly
                 string[] colors = GetThemeForTodo(selectTodo);
                 string displayName = selectTodo.Name;
                 string displayDesc = selectTodo.Description;
-                string displayTags = string.Join(", ", selectTodo.Tags);  
+                string displayTags = string.Join(" #", selectTodo.Tags);  
+                displayTags = displayTags.Insert(0,"#");
                 switch(state.EditingField)
                 {
                     case EditingField.Name: displayName = state.InputBuffer + FlashCursor();break;
