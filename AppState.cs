@@ -15,7 +15,14 @@ namespace Stacly
 
         public AppCoordinator()
         {
-            RootList = Storage.ReadAll();
+            var loadedTasks = Storage.ReadAll();
+
+            if(loadedTasks == null)
+            {
+                SetMessage("Создан новый список задач",false, 5);
+                RootList = new List<Todo>(); 
+            }
+            else RootList = loadedTasks;
         }
 
         //паременты для изменения текстовых значений

@@ -66,7 +66,7 @@ namespace Stacly
 
         }
 
-        public static Grid DrawEdit(Todo selectTodo,AppCoordinator state,List<Todo> todoList)
+        public static Grid DrawEdit(AppCoordinator state,List<Todo> todoList)
         {
             var grid = new Grid();
 
@@ -75,6 +75,7 @@ namespace Stacly
 
             if(todoList.Count > 0)
             {
+                var selectTodo = todoList[state.SelectedIndex];
                 string[] colors = GetThemeForTodo(selectTodo);
                 string displayName = (state.Mod == Mods.Input)
                     ? state.InputBuffer + FlashCursor()

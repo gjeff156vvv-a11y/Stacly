@@ -10,7 +10,10 @@ namespace Stacly
         {
             //сылки на контент
             var tree = ComponentRenderer.DrawList(todoList,Navigation,state);
-            var dital = ComponentRenderer.DrawEdit(todoList[state.SelectedIndex],state,todoList);
+            var dital = new Grid();
+            if(todoList.Count > 0 )
+                dital = ComponentRenderer.DrawEdit(state,todoList);
+            else dital = ComponentRenderer.DrawEdit(state,todoList);
             int total = 0, completed = 0;
             var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total,state);
             var hello = ComponentRenderer.DrawHello(state);

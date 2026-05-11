@@ -30,7 +30,7 @@ namespace Stacly
                 }
                 catch 
                 {
-                    return new List<Todo>(); 
+                    return null;
                 }
             }
         }
