@@ -92,9 +92,9 @@ namespace Stacly
             grid.AddRow("");
             grid.AddRow($"[yellow]Теги:[/]",$"[yellow]{displayTags}[/]");
             grid.AddRow("");
-            grid.AddRow($"Время создания:",$"{selectTodo.CreatedAt}");
+            grid.AddRow($"Время создания:",$"{TodoManager.RelativeTime(selectTodo.CreatedAt)}");
             grid.AddRow("");
-            grid.AddRow($"Время выполнения:",$"{selectTodo.CompleteAt}");
+            grid.AddRow($"Время выполнения:",$"{TodoManager.RelativeTime(selectTodo.CompleteAt)}");
             grid.AddRow("");
 
             return grid;              

@@ -163,5 +163,32 @@ namespace  Stacly
             return (completed, total);
         }
 
+        public static string RelativeTime(DateTime? date)
+        {
+            if(date == null) return null;
+            var time = DateTime.Now - date;
+
+            string relativeTime;
+            if(time.Value.Days >= 1)
+            {
+                relativeTime = time.Value.ToString("dd.MM.yy");
+            }
+            else if(time.Value.Hours >= 1)
+            {
+                if(time.Value.Hours > 4)
+                    relativeTime = $"{time.Value.Hours} часов назад";
+                else relativeTime = $"{time.Value.Hours} часа назад";
+            }
+            else if(time.Value.Minutes >= 1)
+            {
+                if(time.Value.Minutes > 4)
+                    relativeTime = $"{time.Value.Minutes} минут назад";
+                else relativeTime = $"{time.Value.Minutes} минуты назад";
+            }
+            else relativeTime = $"несколько секунд назад";
+
+            return relativeTime;
+        }
+
     }
 }
