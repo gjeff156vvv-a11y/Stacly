@@ -47,6 +47,8 @@ namespace Stacly
                             }
                             ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
                             ctx.Refresh();
+
+                            Thread.Sleep(50);
                         }
                     });
         }

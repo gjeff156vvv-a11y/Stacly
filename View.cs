@@ -31,7 +31,7 @@ namespace Stacly
                 { 
                     if(AppCoordinator.Mod == Mods.Input && AppCoordinator.EditingField == EditingField.Name)
                     {
-                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}_[/]{-10}[{colors[1]}]{date}[/] ");
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}{FlashCursor()}[/]{-10}[{colors[1]}]{date}[/] ");
                     }
                 }
                 else
@@ -66,40 +66,50 @@ namespace Stacly
 
         }
 
-        public static Grid DrawEdit(Todo selectTodo,AppCoordinator AppCoordinator)
+        public static Grid DrawEdit(Todo selectTodo,AppCoordinator AppCoordinator,List<Todo> todoList)
         {
-            string[] colors = GetThemeForTodo(selectTodo);
-            string displayName = (AppCoordinator.Mod == Mods.Input)
-                ? AppCoordinator.InputBuffer + "_" 
-                : selectTodo.Name;
-            string displayDesc = (AppCoordinator.EditingField == EditingField.Description) 
-                ? AppCoordinator.InputBuffer + "_" 
-                : selectTodo.Description;
-
-            string displayTags = (AppCoordinator.EditingField == EditingField.Tags) 
-                ? AppCoordinator.InputBuffer + "_" 
-                : string.Join(", ", selectTodo.Tags);
-
             var grid = new Grid();
 
             grid.AddColumn();
             grid.AddColumn();
 
-            grid.AddRow("");
-            grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{displayName}[/]");
-            grid.AddRow("");
-            grid.AddRow($"[yellow]Важность:[/]",$"[yellow]{selectTodo.Priority}[/]");
-            grid.AddRow("");
-            grid.AddRow($"[green]Описание:[/]",$"[green]{displayDesc}[/]");
-            grid.AddRow("");
-            grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]{Markup.Escape(colors[2])}[/]");
-            grid.AddRow("");
-            grid.AddRow($"[yellow]Теги:[/]",$"[yellow]{displayTags}[/]");
-            grid.AddRow("");
-            grid.AddRow($"Время создания:",$"{TodoManager.RelativeTime(selectTodo.CreatedAt)}");
-            grid.AddRow("");
-            grid.AddRow($"Время выполнения:",$"{TodoManager.RelativeTime(selectTodo.CompleteAt)}");
-            grid.AddRow("");
+            if(todoList.Count > 0)
+            {
+                string[] colors = GetThemeForTodo(selectTodo);
+                string displayName = (AppCoordinator.Mod == Mods.Input)
+                    ? AppCoordinator.InputBuffer + FlashCursor()
+                    : selectTodo.Name;
+                string displayDesc = (AppCoordinator.EditingField == EditingField.Description) 
+                    ? AppCoordinator.InputBuffer + FlashCursor()
+                    : selectTodo.Description;
+
+                string displayTags = (AppCoordinator.EditingField == EditingField.Tags) 
+                    ? AppCoordinator.InputBuffer + FlashCursor()
+                    : string.Join(", ", selectTodo.Tags);
+
+            
+                grid.AddRow("");
+                grid.AddRow($"[{colors[0]}]Имя:[/]",$"[{colors[0]}]{displayName}[/]");
+                grid.AddRow("");
+                grid.AddRow($"[yellow]Важность:[/]",$"[yellow]{selectTodo.Priority}[/]");
+                grid.AddRow("");
+                grid.AddRow($"[green]Описание:[/]",$"[green]{displayDesc}[/]");
+                grid.AddRow("");
+                grid.AddRow($"[{colors[1]}]Статус:[/]",$"[{colors[1]}]{Markup.Escape(colors[2])}[/]");
+                grid.AddRow("");
+                grid.AddRow($"[yellow]Теги:[/]",$"[yellow]{displayTags}[/]");
+                grid.AddRow("");
+                grid.AddRow($"Время создания:",$"{TodoManager.RelativeTime(selectTodo.CreatedAt)}");
+                grid.AddRow("");
+                grid.AddRow($"Время выполнения:",$"{TodoManager.RelativeTime(selectTodo.CompleteAt)}");
+                grid.AddRow("");
+            }
+            else 
+            {
+                grid.AddRow("");
+                grid.AddRow("НИЧЕГО НЕ НАЙДЕНО");
+            }
+
 
             return grid;              
         }
@@ -166,7 +176,7 @@ namespace Stacly
                     displayBuffer += $"[grey]{suggestionPart}[/]";
                 }
 
-                text = new Markup(displayBuffer + "█", new Style(Color.Yellow));
+                text = new Markup(displayBuffer + FlashCursor(), new Style(Color.Yellow));
             }
             else text = new Markup(" ");
 
@@ -191,5 +201,13 @@ namespace Stacly
             return colors;
         }
 
+        private static string FlashCursor()
+        {
+            var flashTime = DateTime.Now.Millisecond;
+            if(flashTime % 1000 < 500)
+                return " ";
+            else return "█";
+
+        }
     }
 }

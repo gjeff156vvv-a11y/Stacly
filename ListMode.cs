@@ -8,6 +8,8 @@ namespace Stacly
          public static void ProcessKey(Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList,ref AppCoordinator AppCoordinator,ref bool Running)
          {
 
+            if(Console.KeyAvailable)
+            {
             var key = Console.ReadKey(true);
 
             switch (key.Key)
@@ -60,6 +62,7 @@ namespace Stacly
                 case ConsoleKey.Spacebar: todoList[AppCoordinator.SelectedIndex].ChangeIsCompleted();AppCoordinator.IsDirty = true ; break;
                 case ConsoleKey.Escape:AppCoordinator.SearchBuffer = "";AppCoordinator.FoundItems = null;break;
                 case ConsoleKey.Q: Running = false; return;
+            }
             }
          }
     }

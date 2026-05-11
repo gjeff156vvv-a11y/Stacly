@@ -10,7 +10,7 @@ namespace Stacly
         {
             //сылки на контент
             var tree = ComponentRenderer.DrawList(todoList,Navigation,AppCoordinator);
-            var dital = ComponentRenderer.DrawEdit(todoList[AppCoordinator.SelectedIndex],AppCoordinator);
+            var dital = ComponentRenderer.DrawEdit(todoList[AppCoordinator.SelectedIndex],AppCoordinator,todoList);
             int total = 0, completed = 0;
             var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total,AppCoordinator);
             var hello = ComponentRenderer.DrawHello(AppCoordinator);
@@ -41,10 +41,6 @@ namespace Stacly
                     break;
             }
 
-            if(todoList.Count <= 0)
-            {
-                Dital = CreateStyledPanel(new Text("/nНИЧЕГО НЕ НАЙДЕНО"), "ДИТАЛИ", Color.White, BoxBorder.Rounded);
-            }
                  
             if(AppCoordinator.SearchBuffer.StartsWith("#"))
                 searchBox = CreateStyledPanel(search, "ПОИСК", Color.Magenta, BoxBorder.Rounded);

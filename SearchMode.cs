@@ -7,6 +7,8 @@ namespace Stacly
     {
         public static void ProcessKey(AppCoordinator AppCoordinator)
         {
+            if(Console.KeyAvailable)
+            {
             var Key = Console.ReadKey(true);
 
             switch (Key.Key)
@@ -44,6 +46,7 @@ namespace Stacly
                         AppCoordinator.SearchBuffer += Key.KeyChar;
                     }
                     break;
+            }
             }
             // 1. Получаем "плоский" список всех задач (включая подзадачи)
             var allTasks = GetAllTasks(AppCoordinator.RootList);

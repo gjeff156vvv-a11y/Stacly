@@ -6,6 +6,8 @@ namespace Stacly
     {
         public static void ProcessKey(AppCoordinator AppCoordinator,Stack<(List<Todo> Tasks,Todo? Parent)> Navigation,List<Todo> todoList)
         {
+            if(Console.KeyAvailable)
+            {
             var Key = Console.ReadKey(true);
 
             switch(Key.Key)
@@ -16,6 +18,7 @@ namespace Stacly
                     AppCoordinator.Mod = Mods.List;
                     break;
                 case ConsoleKey.N: AppCoordinator.Mod = Mods.List;break;
+            }
             }
         }
     }

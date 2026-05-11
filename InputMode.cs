@@ -6,6 +6,8 @@ namespace Stacly
     {
         public static void ProcessKey(ref AppCoordinator AppCoordinator,List<Todo> todoList)
         { 
+            if(Console.KeyAvailable)
+            {
             // Читаем ТОЛЬКО ОДНУ клавишу
             var key = Console.ReadKey(true); 
 
@@ -41,10 +43,11 @@ namespace Stacly
                     if (!char.IsControl(key.KeyChar))
                     {
                         AppCoordinator.InputBuffer += key.KeyChar;
-            }
+                    }
                     break;
 
 
+            }
             }
 
         }

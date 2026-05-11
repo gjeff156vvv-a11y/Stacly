@@ -9,6 +9,8 @@ namespace Stacly
          {
             Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
            
+            if(Console.KeyAvailable)
+            {
             // Читаем нажатие клавиши БЕЗ ожидания Enter
             var key = Console.ReadKey(true);
 
@@ -20,6 +22,7 @@ namespace Stacly
                 case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppCoordinator); break;
                 case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
                 case ConsoleKey.Escape: AppCoordinator.Mod = Mods.List; break;
+            }
             }
          }
     }
