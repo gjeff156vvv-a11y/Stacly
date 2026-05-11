@@ -100,9 +100,9 @@ namespace Stacly
             return grid;              
         }
 
-        public static BreakdownChart DrawBar(List<Todo> todoList,ref int completed ,ref int total)
+        public static BreakdownChart DrawBar(List<Todo> todoList,ref int completed ,ref int total,AppCoordinator AppCoordinator)
         {
-            (completed, total) = TodoManager.GetDeepProgress(todoList);
+            (completed, total) = TodoManager.GetDeepProgress(AppCoordinator.RootList);
             int remaining = total - completed;
 
             var chart = new BreakdownChart()
@@ -147,6 +147,27 @@ namespace Stacly
             return help;
         }
 
+        public static Markup DrawSearch(AppCoordinator AppCoordinator)
+        {
+            Markup text;
+            if(AppCoordinator.Mod == Mods.Search) 
+            {
+                // Во View.cs при отрисовке буфера
+                string displayBuffer = AppCoordinator.SearchBuffer;
+                if (!string.IsNullOrEmpty(AppCoordinator.TagSuggestion))
+                {
+                    // Отрисовываем оставшуюся часть тега серым
+                    var typedPart = AppCoordinator.SearchBuffer.Split('#').Last();
+                    var suggestionPart = AppCoordinator.TagSuggestion.Substring(typedPart.Length);
+                    displayBuffer += $"[grey]{suggestionPart}[/]";
+                }
+
+                text = new Markup(displayBuffer + "█", new Style(Color.Yellow));
+            }
+            else text = new Markup(" ");
+
+            return text; 
+        }
 
         private static string[] GetThemeForTodo(Todo todo)
         {

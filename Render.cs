@@ -12,15 +12,17 @@ namespace Stacly
             var tree = ComponentRenderer.DrawList(todoList,Navigation,AppCoordinator);
             var dital = ComponentRenderer.DrawEdit(todoList[AppCoordinator.SelectedIndex],AppCoordinator);
             int total = 0, completed = 0;
-            var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total);
+            var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total,AppCoordinator);
             var hello = ComponentRenderer.DrawHello(AppCoordinator);
             var help = ComponentRenderer.DrawStatusBar(AppCoordinator);
+            var search = ComponentRenderer.DrawSearch(AppCoordinator);
 
             Panel Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
             Panel Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
             Panel ProgresBar = CreateStyledPanel(progresBar, $"[white]Прогресс: {completed}/{total}[/]", Color.White, BoxBorder.Rounded);
             Panel Hello = CreateStyledPanel(hello, "", Color.White,BoxBorder.Rounded);
             Panel Help = CreateStyledPanel(help, "", Color.White,BoxBorder.Rounded);
+            Panel searchBox = CreateStyledPanel(search, "ПОИСК", Color.White, BoxBorder.Rounded);
 
 
 
@@ -43,17 +45,10 @@ namespace Stacly
             {
                 Dital = CreateStyledPanel(new Text("/nНИЧЕГО НЕ НАЙДЕНО"), "ДИТАЛИ", Color.White, BoxBorder.Rounded);
             }
-                   
-            Text text;
-            if(AppCoordinator.Mod == Mods.Search) text = new Text(AppCoordinator.SearchBuffer + "█", new Style(Color.Yellow));
-            else text = new Text(" ");
-            var searchBox = new Panel(text)
-                .Header(" ПОИСК ")
-                .Border(BoxBorder.Rounded)
-                .Expand()
-                .BorderColor(AppCoordinator.SearchBuffer.StartsWith("#") ? Color.Magenta : Color.Cyan); 
-                // Цвет рамки меняется, если ищем по тегам!
-
+                 
+            if(AppCoordinator.SearchBuffer.StartsWith("#"))
+                searchBox = CreateStyledPanel(search, "ПОИСК", Color.Magenta, BoxBorder.Rounded);
+            else searchBox = CreateStyledPanel(search, "ПОИСК", Color.Cyan, BoxBorder.Rounded);
 
             Window["Search"].Update(searchBox);
             Window["ProgresBar"].Update(ProgresBar);

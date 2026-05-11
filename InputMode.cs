@@ -41,7 +41,7 @@ namespace Stacly
                     if (!char.IsControl(key.KeyChar))
                     {
                         AppCoordinator.InputBuffer += key.KeyChar;
-                    }
+            }
                     break;
 
 

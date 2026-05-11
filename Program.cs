@@ -14,11 +14,8 @@ namespace Stacly
             //состояние приложения
             bool Running = true;
 
-            //главный список для сохранения
-            List<Todo>  RootList = Storage.ReadAll();
-
             var Navigation = new Stack<(List<Todo> Tasks,Todo? Parent)>();
-            Navigation.Push((RootList,null));
+            Navigation.Push((AppCoordinator.RootList,null));
 
             var Window = RenderWindow.InitializeLayout();
 
@@ -47,14 +44,14 @@ namespace Stacly
                                 case Mods.List: ListMode.ProcessKey(Navigation,currentList,ref AppCoordinator,ref Running); break;
                                 case Mods.Edit: EditMode.ProcessKey(currentList,ref AppCoordinator); break;
                                 case Mods.Input: InputMode.ProcessKey(ref AppCoordinator,currentList); break;
-                                case Mods.Search: SearchMode.ProcessKey(RootList,AppCoordinator);break;
+                                case Mods.Search: SearchMode.ProcessKey(AppCoordinator);break;
                                 case Mods.ConfirmDelete: ConfirmDeleteMode.ProcessKey(AppCoordinator,Navigation,currentList);break;
                             }
                             ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
                             ctx.Refresh();
+                            Storage.SaveAll(AppCoordinator.RootList);
                         }
                     });
-            Storage.SaveAll(RootList);
         }
 
     }

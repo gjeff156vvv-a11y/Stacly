@@ -10,6 +10,14 @@ namespace Stacly
         public int SelectedIndex = 0;
         public Mods Mod = Mods.List;
 
+        //главный список для сохранения
+        public List<Todo>  RootList {get; private set;}
+
+        public AppCoordinator()
+        {
+            RootList = Storage.ReadAll();
+        }
+
         //паременты для изменения текстовых значений
         public string InputBuffer = "";
         public EditingField EditingField = EditingField.Name;
@@ -19,5 +27,7 @@ namespace Stacly
         public string SearchBuffer = "";
         public List<Todo> FoundItems = null;
         public int FoundMatchIndex = 0;
+        public string TagSuggestion = ""; // Хранит найденный вариант (например, "work")
+
     }
 }

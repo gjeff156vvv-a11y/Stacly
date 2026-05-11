@@ -5,7 +5,7 @@ namespace Stacly
 {
     static class SearchMode
     {
-        public static void ProcessKey(List<Todo> todoList,AppCoordinator AppCoordinator)
+        public static void ProcessKey(AppCoordinator AppCoordinator)
         {
             var Key = Console.ReadKey(true);
 
@@ -25,6 +25,17 @@ namespace Stacly
                     AppCoordinator.SearchBuffer = "";
                     AppCoordinator.Mod = Mods.List;
                     break;
+                
+                case ConsoleKey.Tab:
+                    if (!string.IsNullOrEmpty(AppCoordinator.TagSuggestion))
+                    {
+                        var words = AppCoordinator.SearchBuffer.Split(' ');
+                        var lastWord = words.Last();
+                        // Заменяем неполный тег на полный
+                        AppCoordinator.SearchBuffer = string.Join(" ", words.SkipLast(1)) + " #" + AppCoordinator.TagSuggestion;
+                        AppCoordinator.TagSuggestion = ""; 
+                    }
+                    break;
 
                 default:
                     // Если это обычная буква или цифра
@@ -35,21 +46,27 @@ namespace Stacly
                     break;
             }
             // 1. Получаем "плоский" список всех задач (включая подзадачи)
-            var allTasks = GetAllTasks(todoList);
+            var allTasks = GetAllTasks(AppCoordinator.RootList);
 
             var queryRaw = AppCoordinator.SearchBuffer.ToLower().Trim();
             var parts = queryRaw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            AppCoordinator.FoundItems = allTasks.Where(t => {
+            AppCoordinator.FoundItems = allTasks.Where(t => 
+            {
                 if (parts.Length == 0) return true;
 
                 // Задача должна содержать ВСЕ слова из поиска
                 return parts.All(part => {
-                if (part.StartsWith("#")) {
-                // Поиск по тегам (убираем #)
-                var tagPart = part.TrimStart('#');
-                return t.Tags != null && t.Tags.Any(tag => tag.ToLower().Contains(tagPart));
+                if (part.StartsWith("#"))
+                {
+                    // Поиск по тегам (убираем #)
+                    var tagPart = part.TrimStart('#').ToLower();
+                    var allTags = GetAllUniqueTags(AppCoordinator.RootList);
+
+                    AppCoordinator.TagSuggestion = allTags.FirstOrDefault(t => t.ToLower().StartsWith(tagPart)) ?? "";
+                    return t.Tags != null && t.Tags.Any(tag => tag.ToLower().Contains(tagPart));
                 }
+                AppCoordinator.TagSuggestion = "";
                 // Обычный поиск в имени
                 return t.Name.ToLower().Contains(part);
                 });
@@ -69,6 +86,15 @@ namespace Stacly
                 }
             }
         }
+
+        public static List<string> GetAllUniqueTags(List<Todo> rootList)
+        {
+            return GetAllTasks(rootList) // Используем твой метод обхода дерева
+                .SelectMany(t => t.Tags)
+                .Distinct()
+                .ToList();
+        }
+
 
     }
 }
