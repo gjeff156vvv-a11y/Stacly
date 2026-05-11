@@ -34,13 +34,6 @@ namespace Stacly
                             AppCoordinator.SelectedIndex = todoList.Count -1;
                     }
                     break;
-                case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppCoordinator); break;
-                case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppCoordinator); break;
-                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete; break;
-                case ConsoleKey.E: AppCoordinator.Mod = Mods.Edit; break;
-                case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex]); break;
-                case ConsoleKey.Tab:AppCoordinator.IsExpanded = !AppCoordinator.IsExpanded; break;
-                default:if (key.KeyChar == '/') {AppCoordinator.SearchBuffer = "";AppCoordinator.Mod = Mods.Search;}break;
                 case ConsoleKey.N:
                         if(AppCoordinator.SearchBuffer == "" && AppCoordinator.FoundItems == null)
                             TodoManager.AddTodo(Navigation.Peek().Tasks,ref AppCoordinator);
@@ -50,7 +43,14 @@ namespace Stacly
                            else TodoManager.MoveDownSearch(AppCoordinator,todoList);
                         }
                         break;
-                case ConsoleKey.Spacebar: todoList[AppCoordinator.SelectedIndex].ChangeIsCompleted();TodoManager.Sort(todoList,AppCoordinator) ; break;
+                case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppCoordinator); break;
+                case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppCoordinator); break;
+                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete; break;
+                case ConsoleKey.E: AppCoordinator.Mod = Mods.Edit; AppCoordinator.IsDirty = true;break;
+                case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex]); AppCoordinator.IsDirty = true;break;
+                case ConsoleKey.Tab:AppCoordinator.IsExpanded = !AppCoordinator.IsExpanded; break;
+                default:if (key.KeyChar == '/') {AppCoordinator.SearchBuffer = "";AppCoordinator.Mod = Mods.Search;}break;
+                case ConsoleKey.Spacebar: todoList[AppCoordinator.SelectedIndex].ChangeIsCompleted();AppCoordinator.IsDirty = true ; break;
                 case ConsoleKey.Escape:AppCoordinator.SearchBuffer = "";AppCoordinator.FoundItems = null;break;
                 case ConsoleKey.Q: Running = false; return;
             }

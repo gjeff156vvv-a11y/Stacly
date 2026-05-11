@@ -34,7 +34,12 @@ namespace Stacly
 
                         while(Running)
                         {
-                            currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
+                            if(AppCoordinator.IsDirty == true) 
+                            {
+                                currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
+                                AppCoordinator.IsDirty = false;
+                            }
+
                             ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
                             ctx.Refresh();
                             switch(AppCoordinator.Mod)

@@ -6,6 +6,7 @@ namespace Stacly
     public class AppCoordinator 
     {
         public bool IsExpanded = false;
+        public bool IsDirty = false;
         public int SelectedIndex = 0;
         public Mods Mod = Mods.List;
 
