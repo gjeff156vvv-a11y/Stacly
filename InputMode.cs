@@ -4,7 +4,7 @@ namespace Stacly
 {
     static class InputMode
     {
-        public static void ProcessKey(ref AppCoordinator AppCoordinator,List<Todo> todoList)
+        public static void ProcessKey(ref AppCoordinator state,List<Todo> todoList)
         { 
             if(Console.KeyAvailable)
             {
@@ -15,37 +15,37 @@ namespace Stacly
             {
                 case ConsoleKey.Enter:
                     // Пользователь закончил ввод
-                    switch(AppCoordinator.EditingField)
+                    switch(state.EditingField)
                     {
-                        case EditingField.Name:        AppCoordinator.EditingTodo.ChangeName(AppCoordinator.InputBuffer);break;
-                        case EditingField.Description: AppCoordinator.EditingTodo.ChangeDescription(AppCoordinator.InputBuffer);break;
-                        case EditingField.Tags:        AppCoordinator.EditingTodo.ChangeTags(AppCoordinator.InputBuffer);break;
+                        case EditingField.Name:        state.EditingTodo.ChangeName(state.InputBuffer);break;
+                        case EditingField.Description: state.EditingTodo.ChangeDescription(state.InputBuffer);break;
+                        case EditingField.Tags:        state.EditingTodo.ChangeTags(state.InputBuffer);break;
                     }
 
-                    AppCoordinator.InputBuffer = ""; // Очищаем черновик
-                    AppCoordinator.EditingTodo = null;
-                    AppCoordinator.SetMessage("Изменение сохранины",false);
-                    AppCoordinator.Mod = Mods.List; // Возвращаемся в обычный режим
+                    state.InputBuffer = ""; // Очищаем черновик
+                    state.EditingTodo = null;
+                    state.SetMessage("Изменение сохранины",false);
+                    state.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
                 case ConsoleKey.Backspace:
-                    if (AppCoordinator.InputBuffer.Length > 0)
-                    AppCoordinator.InputBuffer = AppCoordinator.InputBuffer[..^1];
+                    if (state.InputBuffer.Length > 0)
+                    state.InputBuffer = state.InputBuffer[..^1];
                     break;
                 
                 case ConsoleKey.Escape:
-                    AppCoordinator.InputBuffer = "";
-                    AppCoordinator.EditingTodo = null;
-                    AppCoordinator.Mod = Mods.List;
+                    state.InputBuffer = "";
+                    state.EditingTodo = null;
+                    state.Mod = Mods.List;
                     break;
 
                 default:
                     // Если это обычная буква или цифра
                     if (!char.IsControl(key.KeyChar))
                     {
-                        AppCoordinator.InputBuffer += key.KeyChar;
+                        state.InputBuffer += key.KeyChar;
                     }
-                    else AppCoordinator.SetMessage("Нет такой комманды",false);
+                    else state.SetMessage("Нет такой комманды",false);
                     break;
 
 

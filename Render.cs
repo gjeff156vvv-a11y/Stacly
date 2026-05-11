@@ -6,16 +6,16 @@ namespace Stacly
 {
     static class RenderWindow
     {
-        public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator AppCoordinator)
+        public static Layout Render(Layout Window,List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator state)
         {
             //сылки на контент
-            var tree = ComponentRenderer.DrawList(todoList,Navigation,AppCoordinator);
-            var dital = ComponentRenderer.DrawEdit(todoList[AppCoordinator.SelectedIndex],AppCoordinator,todoList);
+            var tree = ComponentRenderer.DrawList(todoList,Navigation,state);
+            var dital = ComponentRenderer.DrawEdit(todoList[state.SelectedIndex],state,todoList);
             int total = 0, completed = 0;
-            var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total,AppCoordinator);
-            var hello = ComponentRenderer.DrawHello(AppCoordinator);
-            var help = ComponentRenderer.DrawStatusBar(AppCoordinator);
-            var search = ComponentRenderer.DrawSearch(AppCoordinator);
+            var progresBar = ComponentRenderer.DrawBar(todoList,ref completed,ref total,state);
+            var hello = ComponentRenderer.DrawHello(state);
+            var help = ComponentRenderer.DrawStatusBar(state);
+            var search = ComponentRenderer.DrawSearch(state);
 
             Panel Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Rounded);
             Panel Dital = CreateStyledPanel(dital, "ДИТАЛИ", Color.White, BoxBorder.Rounded);
@@ -26,7 +26,7 @@ namespace Stacly
 
 
 
-            switch(AppCoordinator.Mod)
+            switch(state.Mod)
             {
                 case Mods.List:
                     Tree = CreateStyledPanel(tree, "СПИСОК ЗАДАЧ", Color.White,BoxBorder.Double);
@@ -41,14 +41,14 @@ namespace Stacly
                     break;
             }
 
-            if(AppCoordinator.Message != null && AppCoordinator.MessageError == true && AppCoordinator.MessageUtil > DateTime.Now)
+            if(state.Message != null && state.MessageError == true && state.MessageUtil > DateTime.Now)
                 Help = CreateStyledPanel(help, "", Color.Red,BoxBorder.Rounded);
-            else if(AppCoordinator.Message != null && AppCoordinator.MessageError == false && AppCoordinator.MessageUtil > DateTime.Now)
+            else if(state.Message != null && state.MessageError == false && state.MessageUtil > DateTime.Now)
                 Help = CreateStyledPanel(help, "", Color.Yellow,BoxBorder.Rounded);
             else Help = CreateStyledPanel(help, "", Color.White,BoxBorder.Rounded);
 
                  
-            if(AppCoordinator.SearchBuffer.StartsWith("#"))
+            if(state.SearchBuffer.StartsWith("#"))
                 searchBox = CreateStyledPanel(search, "ПОИСК", Color.Magenta, BoxBorder.Rounded);
             else searchBox = CreateStyledPanel(search, "ПОИСК", Color.Cyan, BoxBorder.Rounded);
 

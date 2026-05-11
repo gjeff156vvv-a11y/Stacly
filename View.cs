@@ -6,7 +6,7 @@ namespace Stacly
     static class ComponentRenderer
     {
 
-        public static Tree DrawList(List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator AppCoordinator)
+        public static Tree DrawList(List<Todo> todoList,Stack<(List<Todo> Tasks, Todo Parent)> Navigation,AppCoordinator state)
         {
             Tree tree;
             if(Navigation.Peek().Parent == null)
@@ -23,27 +23,27 @@ namespace Stacly
                     date = TodoManager.RelativeTime(todoList[i].CompleteAt);
                 else date = TodoManager.RelativeTime(todoList[i].CreatedAt);
 
-                if(AppCoordinator.SelectedIndex == i)
+                if(state.SelectedIndex == i)
                 {
                     todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                 }
-                else if(AppCoordinator.EditingTodo == todoList[i])
+                else if(state.EditingTodo == todoList[i])
                 { 
-                    if(AppCoordinator.Mod == Mods.Input && AppCoordinator.EditingField == EditingField.Name)
+                    if(state.Mod == Mods.Input && state.EditingField == EditingField.Name)
                     {
-                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{AppCoordinator.InputBuffer}{FlashCursor()}[/]{-10}[{colors[1]}]{date}[/] ");
+                        todo = tree.AddNode($"[CadetBlue_1]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{state.InputBuffer}{FlashCursor(),-10}[/][{colors[1]}]{date}[/] ");
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(AppCoordinator.SearchBuffer.ToLower().Trim()) && AppCoordinator.FoundItems.Contains(todoList[i])) 
+                    if (!string.IsNullOrEmpty(state.SearchBuffer.ToLower().Trim()) && state.FoundItems.Contains(todoList[i])) 
                     {
                         todo = tree.AddNode($"[DarkOrange]{i+1,-2}[/] [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                     }
                     else todo = tree.AddNode($"{i+1,-2} [{colors[1]}]{Markup.Escape(colors[2]),-7}[/] [{colors[0]}]{todoList[i].Name,-10}[/][{colors[1]}]{date}[/] ");
                 }
 
-                if(AppCoordinator.IsExpanded  == true && todo != null)
+                if(state.IsExpanded  == true && todo != null)
                 {
                      AddNodeRecurse(todo,todoList[i].SubTasks);
                 }
@@ -66,7 +66,7 @@ namespace Stacly
 
         }
 
-        public static Grid DrawEdit(Todo selectTodo,AppCoordinator AppCoordinator,List<Todo> todoList)
+        public static Grid DrawEdit(Todo selectTodo,AppCoordinator state,List<Todo> todoList)
         {
             var grid = new Grid();
 
@@ -76,15 +76,15 @@ namespace Stacly
             if(todoList.Count > 0)
             {
                 string[] colors = GetThemeForTodo(selectTodo);
-                string displayName = (AppCoordinator.Mod == Mods.Input)
-                    ? AppCoordinator.InputBuffer + FlashCursor()
+                string displayName = (state.Mod == Mods.Input)
+                    ? state.InputBuffer + FlashCursor()
                     : selectTodo.Name;
-                string displayDesc = (AppCoordinator.EditingField == EditingField.Description) 
-                    ? AppCoordinator.InputBuffer + FlashCursor()
+                string displayDesc = (state.EditingField == EditingField.Description) 
+                    ? state.InputBuffer + FlashCursor()
                     : selectTodo.Description;
 
-                string displayTags = (AppCoordinator.EditingField == EditingField.Tags) 
-                    ? AppCoordinator.InputBuffer + FlashCursor()
+                string displayTags = (state.EditingField == EditingField.Tags) 
+                    ? state.InputBuffer + FlashCursor()
                     : string.Join(", ", selectTodo.Tags);
 
             
@@ -114,9 +114,9 @@ namespace Stacly
             return grid;              
         }
 
-        public static BreakdownChart DrawBar(List<Todo> todoList,ref int completed ,ref int total,AppCoordinator AppCoordinator)
+        public static BreakdownChart DrawBar(List<Todo> todoList,ref int completed ,ref int total,AppCoordinator state)
         {
-            (completed, total) = TodoManager.GetDeepProgress(AppCoordinator.RootList);
+            (completed, total) = TodoManager.GetDeepProgress(state.RootList);
             int remaining = total - completed;
 
             var chart = new BreakdownChart()
@@ -130,14 +130,14 @@ namespace Stacly
             return chart;
         }
 
-        public static Grid DrawHello(AppCoordinator AppCoordinator)
+        public static Grid DrawHello(AppCoordinator state)
         {
             // Примерная идея для содержимого:
             var grid = new Grid().AddColumn();
             grid.AddRow("");
             grid.AddRow("[bold cadetblue_1]STACKLY TUI[/] [gray]v1.0[/]");
             grid.AddRow("");
-            grid.AddRow($"[yellow]Mode:[/] [invert]{AppCoordinator.Mod}[/]");
+            grid.AddRow($"[yellow]Mode:[/] [invert]{state.Mod}[/]");
             //grid.AddRow($"[blue]Total Tasks:[/] {TodoManager.GetDeepProgress(rootList).total}");
             return grid;
 
@@ -171,18 +171,18 @@ namespace Stacly
             return help;
         }
 
-        public static Markup DrawSearch(AppCoordinator AppCoordinator)
+        public static Markup DrawSearch(AppCoordinator state)
         {
             Markup text;
-            if(AppCoordinator.Mod == Mods.Search) 
+            if(state.Mod == Mods.Search) 
             {
                 // Во View.cs при отрисовке буфера
-                string displayBuffer = AppCoordinator.SearchBuffer;
-                if (!string.IsNullOrEmpty(AppCoordinator.TagSuggestion))
+                string displayBuffer = state.SearchBuffer;
+                if (!string.IsNullOrEmpty(state.TagSuggestion))
                 {
                     // Отрисовываем оставшуюся часть тега серым
-                    var typedPart = AppCoordinator.SearchBuffer.Split('#').Last();
-                    var suggestionPart = AppCoordinator.TagSuggestion.Substring(typedPart.Length);
+                    var typedPart = state.SearchBuffer.Split('#').Last();
+                    var suggestionPart = state.TagSuggestion.Substring(typedPart.Length);
                     displayBuffer += $"[grey]{suggestionPart}[/]";
                 }
 

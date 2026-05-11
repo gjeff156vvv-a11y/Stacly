@@ -5,9 +5,9 @@ namespace Stacly
 {
     static class EditMode
     {
-         public static void ProcessKey(List<Todo> todoList,ref AppCoordinator AppCoordinator)
+         public static void ProcessKey(List<Todo> todoList,ref AppCoordinator state)
          {
-            Todo selectTodo = todoList[AppCoordinator.SelectedIndex];
+            Todo selectTodo = todoList[state.SelectedIndex];
            
             if(Console.KeyAvailable)
             {
@@ -16,12 +16,12 @@ namespace Stacly
 
             switch (key.Key)
             {
-                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,AppCoordinator); break;
-                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,AppCoordinator); break;               
-                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo,AppCoordinator); break;
-                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,AppCoordinator); break;
+                case ConsoleKey.R: TodoManager.RenameTodo(selectTodo,state); break;
+                case ConsoleKey.D: TodoManager.WriteDescription(selectTodo,state); break;               
+                case ConsoleKey.P: TodoManager.CyclePriority(selectTodo,state); break;
+                case ConsoleKey.T: TodoManager.WriteTags(selectTodo,state); break;
                 case ConsoleKey.Spacebar: selectTodo.ChangeIsCompleted(); break;
-                case ConsoleKey.Escape: AppCoordinator.Mod = Mods.List; break;
+                case ConsoleKey.Escape: state.Mod = Mods.List; break;
             }
             }
          }

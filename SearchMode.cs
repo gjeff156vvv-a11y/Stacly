@@ -5,7 +5,7 @@ namespace Stacly
 {
     static class SearchMode
     {
-        public static void ProcessKey(AppCoordinator AppCoordinator)
+        public static void ProcessKey(AppCoordinator state)
         {
             if(Console.KeyAvailable)
             {
@@ -15,27 +15,27 @@ namespace Stacly
             {
                 case ConsoleKey.Enter:
                     // Пользователь закончил ввод
-                    AppCoordinator.Mod = Mods.List; // Возвращаемся в обычный режим
+                    state.Mod = Mods.List; // Возвращаемся в обычный режим
                     break;
 
                 case ConsoleKey.Backspace:
-                    if (AppCoordinator.SearchBuffer.Length > 0)
-                    AppCoordinator.SearchBuffer = AppCoordinator.SearchBuffer[..^1];
+                    if (state.SearchBuffer.Length > 0)
+                    state.SearchBuffer = state.SearchBuffer[..^1];
                     break;
                 
                 case ConsoleKey.Escape:
-                    AppCoordinator.SearchBuffer = "";
-                    AppCoordinator.Mod = Mods.List;
+                    state.SearchBuffer = "";
+                    state.Mod = Mods.List;
                     break;
                 
                 case ConsoleKey.Tab:
-                    if (!string.IsNullOrEmpty(AppCoordinator.TagSuggestion))
+                    if (!string.IsNullOrEmpty(state.TagSuggestion))
                     {
-                        var words = AppCoordinator.SearchBuffer.Split(' ');
+                        var words = state.SearchBuffer.Split(' ');
                         var lastWord = words.Last();
                         // Заменяем неполный тег на полный
-                        AppCoordinator.SearchBuffer = string.Join(" ", words.SkipLast(1)) + " #" + AppCoordinator.TagSuggestion;
-                        AppCoordinator.TagSuggestion = ""; 
+                        state.SearchBuffer = string.Join(" ", words.SkipLast(1)) + " #" + state.TagSuggestion;
+                        state.TagSuggestion = ""; 
                     }
                     break;
 
@@ -43,18 +43,18 @@ namespace Stacly
                     // Если это обычная буква или цифра
                     if (!char.IsControl(Key.KeyChar))
                     {
-                        AppCoordinator.SearchBuffer += Key.KeyChar;
+                        state.SearchBuffer += Key.KeyChar;
                     }
                     break;
             }
             }
             // 1. Получаем "плоский" список всех задач (включая подзадачи)
-            var allTasks = GetAllTasks(AppCoordinator.RootList);
+            var allTasks = GetAllTasks(state.RootList);
 
-            var queryRaw = AppCoordinator.SearchBuffer.ToLower().Trim();
+            var queryRaw = state.SearchBuffer.ToLower().Trim();
             var parts = queryRaw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            AppCoordinator.FoundItems = allTasks.Where(t => 
+            state.FoundItems = allTasks.Where(t => 
             {
                 if (parts.Length == 0) return true;
 
@@ -64,12 +64,12 @@ namespace Stacly
                 {
                     // Поиск по тегам (убираем #)
                     var tagPart = part.TrimStart('#').ToLower();
-                    var allTags = GetAllUniqueTags(AppCoordinator.RootList);
+                    var allTags = GetAllUniqueTags(state.RootList);
 
-                    AppCoordinator.TagSuggestion = allTags.FirstOrDefault(t => t.ToLower().StartsWith(tagPart)) ?? "";
+                    state.TagSuggestion = allTags.FirstOrDefault(t => t.ToLower().StartsWith(tagPart)) ?? "";
                     return t.Tags != null && t.Tags.Any(tag => tag.ToLower().Contains(tagPart));
                 }
-                AppCoordinator.TagSuggestion = "";
+                state.TagSuggestion = "";
                 // Обычный поиск в имени
                 return t.Name.ToLower().Contains(part);
                 });

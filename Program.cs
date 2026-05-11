@@ -9,13 +9,13 @@ namespace Stacly
 
         public static void Main(string[] str)
         {
-            var AppCoordinator = new AppCoordinator();
+            var state = new AppCoordinator();
 
             //состояние приложения
             bool Running = true;
 
             var Navigation = new Stack<(List<Todo> Tasks,Todo? Parent)>();
-            Navigation.Push((AppCoordinator.RootList,null));
+            Navigation.Push((state.RootList,null));
 
             var Window = RenderWindow.InitializeLayout();
 
@@ -25,27 +25,27 @@ namespace Stacly
             AnsiConsole.Live(Window)
                 .Start(ctx => 
                     {
-                        var currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
-                        ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
+                        var currentList = TodoManager.Sort(Navigation.Peek().Tasks,state);
+                        ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,state));
                         ctx.Refresh();
 
                         while(Running)
                         {
-                            switch(AppCoordinator.Mod)
+                            switch(state.Mod)
                             {
-                                case Mods.List: ListMode.ProcessKey(Navigation,currentList,ref AppCoordinator,ref Running); break;
-                                case Mods.Edit: EditMode.ProcessKey(currentList,ref AppCoordinator); break;
-                                case Mods.Input: InputMode.ProcessKey(ref AppCoordinator,currentList); break;
-                                case Mods.Search: SearchMode.ProcessKey(AppCoordinator);break;
-                                case Mods.ConfirmDelete: ConfirmDeleteMode.ProcessKey(AppCoordinator,Navigation,currentList);break;
+                                case Mods.List: ListMode.ProcessKey(Navigation,currentList,ref state,ref Running); break;
+                                case Mods.Edit: EditMode.ProcessKey(currentList,ref state); break;
+                                case Mods.Input: InputMode.ProcessKey(ref state,currentList); break;
+                                case Mods.Search: SearchMode.ProcessKey(state);break;
+                                case Mods.ConfirmDelete: ConfirmDeleteMode.ProcessKey(state,Navigation,currentList);break;
                             }
-                            if(AppCoordinator.IsDirty == true) 
+                            if(state.IsDirty == true) 
                             {
-                                currentList = TodoManager.Sort(Navigation.Peek().Tasks,AppCoordinator);
-                                AppCoordinator.IsDirty = false;
-                                Storage.SaveAll(AppCoordinator.RootList);
+                                currentList = TodoManager.Sort(Navigation.Peek().Tasks,state);
+                                state.IsDirty = false;
+                                Storage.SaveAll(state.RootList);
                             }
-                            ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,AppCoordinator));
+                            ctx.UpdateTarget(RenderWindow.Render(Window,currentList,Navigation,state));
                             ctx.Refresh();
 
                             Thread.Sleep(50);
