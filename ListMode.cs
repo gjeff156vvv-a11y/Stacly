@@ -61,8 +61,8 @@ namespace Stacly
                     else state.SetMessage("Нет такой комманды",true);
                     break;
 
-                case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref state); break;
-                case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  state); break;
+                case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref state); state.IsDirty = true;break;
+                case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  state); state.IsDirty = true;break;
                 case ConsoleKey.D: state.Mod = Mods.ConfirmDelete;break;
                 case ConsoleKey.E: state.Mod = Mods.Edit; state.IsDirty = true;break;
                 case ConsoleKey.P: TodoManager.CyclePriority(todoList[state.SelectedIndex],state); state.IsDirty = true;break;

@@ -73,7 +73,7 @@ namespace Stacly
             {
                 // Этот код выполнится в любом случае при выходе
                 AnsiConsole.Cursor.Show(); 
-                //Console.Clear();
+                Console.Clear();
                 AnsiConsole.MarkupLine("[yellow]Stacly закрыт. До встречи![/]");
             }
         }
