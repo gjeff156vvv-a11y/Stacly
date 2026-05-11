@@ -52,7 +52,7 @@ namespace Stacly
 
                 case ConsoleKey.L: TodoManager.PushNavigation(Navigation,ref AppCoordinator); break;
                 case ConsoleKey.H: TodoManager.PopNavigation(Navigation,ref  AppCoordinator); break;
-                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete; AppCoordinator.IsDirty = true;break;
+                case ConsoleKey.D: AppCoordinator.Mod = Mods.ConfirmDelete;break;
                 case ConsoleKey.E: AppCoordinator.Mod = Mods.Edit; AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.P: TodoManager.CyclePriority(todoList[AppCoordinator.SelectedIndex]); AppCoordinator.IsDirty = true;break;
                 case ConsoleKey.Tab:AppCoordinator.IsExpanded = !AppCoordinator.IsExpanded; break;

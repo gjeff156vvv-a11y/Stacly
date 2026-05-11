@@ -11,7 +11,8 @@ namespace Stacly
             switch(Key.Key)
             {
                 case ConsoleKey.Y: 
-                    TodoManager.RemoveTodo(Navigation,todoList,AppCoordinator);
+                    TodoManager.RemoveTodo(Navigation,Navigation.Peek().Tasks,AppCoordinator);
+                    AppCoordinator.IsDirty = true;
                     AppCoordinator.Mod = Mods.List;
                     break;
                 case ConsoleKey.N: AppCoordinator.Mod = Mods.List;break;
